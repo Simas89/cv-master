@@ -1,5 +1,7 @@
 {
   "baseUrl": "http://localhost:3000",
   "viewportHeight": 786,
-  "viewportWidth": 1024
+  "viewportWidth": 1024,
+  "projectId": "ii5ejr",
+  "record": true
 }

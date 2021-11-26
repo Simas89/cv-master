@@ -25,6 +25,7 @@ const Game = () => {
       {/* @ts-ignore */}
       <StyledLink href='editor'>
         <h1>CREATE</h1>
+        dev
       </StyledLink>
       <GameOfLife />
     </Div>

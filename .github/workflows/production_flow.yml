@@ -12,9 +12,6 @@ jobs:
   cypress-run:
     runs-on: ubuntu-latest
     container: cypress/browsers:node14.17.0-chrome91-ff89
-    strategy:
-      matrix:
-        containers: [1, 2, 3]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,7 +23,7 @@ jobs:
           start: npm start
           wait-on: http://localhost:3000
           record: true
-          parallel: true
+#           parallel: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY_PROD }}
 

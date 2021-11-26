@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import connectDB from '../lib/mongodb';
 import type { NextPage } from 'next';
 import styled from 'styled-components';
 import LeftPanel from 'pageComps/editor/LeftPanel';

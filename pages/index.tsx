@@ -22,6 +22,7 @@ const StyledLink = styled(Link)`
 const Game = () => {
   return (
     <Div data-cy='home_page'>
+      {/* @ts-ignore */}
       <StyledLink href='editor'>
         <h1>CREATE</h1>
       </StyledLink>

@@ -36,7 +36,7 @@ const initialState: InventoryState = {
 
 interface LoadNewComponentsPageProps {
   pageId: string;
-  components: any;
+  components?: any;
 }
 
 export const slice = createSlice({

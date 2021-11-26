@@ -23,18 +23,19 @@ jobs:
           start: npm start
           wait-on: http://localhost:3000
 
-  # deploy-vercel:
-  #   needs: [cypress-run]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v2
+  deploy-vercel:
+    needs: [cypress-run]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-  #     - name: Deploy to Vercel
-  #       id: deploy-vercel-staging
-  #       uses: amondnet/vercel-action@v20
-  #       with:
-  #         vercel-token: uFmdVbQ6Lx2gHR95pHCtJK4M
-  #         vercel-org-id: qp2WInrcWswx79QwgVEiwwRV
-  #         vercel-project-id: prj_xsyBdmPZu2xcgFSkNB4HyFZabjaW
-  #         scope: qp2WInrcWswx79QwgVEiwwRV
+      - name: Deploy to Vercel
+#         id: deploy-vercel-production
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          scope: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-args: --prod

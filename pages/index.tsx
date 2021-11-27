@@ -14,7 +14,7 @@ const Div = styled.div`
   }
 `;
 
-const StyledLink = styled(Link)`
+const NoStyleLink = styled(Link)`
   text-decoration: none;
   color: inherit;
 `;
@@ -22,10 +22,9 @@ const StyledLink = styled(Link)`
 const Game = () => {
   return (
     <Div data-cy='home_page'>
-      {/* @ts-ignore */}
-      <StyledLink href='editor'>
+      <NoStyleLink href='editor'>
         <h1>CREATE</h1>
-      </StyledLink>
+      </NoStyleLink>
       <GameOfLife />
     </Div>
   );

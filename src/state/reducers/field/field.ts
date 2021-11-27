@@ -16,10 +16,12 @@ interface SetFreeProps {
 }
 
 interface SetModifyModeProps {
-  pageId?: string;
-  componentType?: ComponentType;
   isOn?: boolean;
+  pageId?: string;
+  componentId?: string;
+  componentType?: ComponentType;
   isPassing?: boolean;
+  memoize?: boolean;
   width?: number;
   height?: number;
   hLocation?: number;
@@ -57,13 +59,17 @@ interface FieldState {
   blockSize: number;
   modifyMode: {
     isOn: boolean;
-    isPassing: boolean;
-    componentType: ComponentType;
     pageId: string;
+    componentId: string;
+    componentType: ComponentType;
+    isPassing: boolean;
+    memoize: boolean;
     width: number;
     height: number;
     hLocation: number;
     vLocation: number;
+    memoHLocation: number;
+    memoVLocation: number;
   };
   zoom: number;
   showGrid: boolean;
@@ -99,13 +105,17 @@ const initialState: FieldState = {
   blockSize: 40,
   modifyMode: {
     isOn: false,
-    isPassing: false,
-    componentType: ComponentType.NULL,
     pageId: '',
+    componentId: '',
+    componentType: ComponentType.NULL,
+    isPassing: false,
+    memoize: false,
     width: 0,
     height: 0,
     hLocation: 0,
     vLocation: 0,
+    memoHLocation: 0,
+    memoVLocation: 0,
   },
   zoom: 1,
   showGrid: true,
@@ -157,7 +167,19 @@ export const slice = createSlice({
 
     setModifyMode: (state, action: PayloadAction<SetModifyModeProps>) => {
       const currentModifyMode = current(state.modifyMode);
-      state.modifyMode = { ...currentModifyMode, ...action.payload };
+
+      const memoInit: { memoHLocation?: number; memoVLocation?: number } = {};
+      const memoize = action.payload.memoize;
+      if (memoize) {
+        memoInit.memoHLocation = action.payload.hLocation;
+        memoInit.memoVLocation = action.payload.vLocation;
+      }
+
+      state.modifyMode = {
+        ...currentModifyMode,
+        ...action.payload,
+        ...memoInit,
+      };
     },
 
     checkSlot: (

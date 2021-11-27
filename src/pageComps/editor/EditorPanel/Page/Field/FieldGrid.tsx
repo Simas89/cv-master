@@ -6,6 +6,7 @@ import styled from 'styled-components';
 const StyledSvg = styled.svg`
   position: absolute;
   /* border: 1px solid gray; */
+  z-index: -1;
   height: 100%;
   width: 100%;
   top: 0;
@@ -20,7 +21,7 @@ const StyledSvg = styled.svg`
 
 const shift = (idx: number, size: number) => {
   if (idx === 0) {
-    return '1px';
+    return '0px';
   }
   return `${idx * size}px`;
 };

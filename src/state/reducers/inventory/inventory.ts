@@ -102,7 +102,10 @@ export const slice = createSlice({
       const pageId = action.payload.pageId;
       const componentId = action.payload.componentId;
 
-      state.pages[pageId].components[componentId] = action.payload.component;
+      state.pages[pageId].components[componentId] = {
+        ...state.pages[pageId].components[componentId],
+        ...action.payload.component,
+      };
     },
     deleteComponent: (state, action: PayloadAction<DeleteComponentProps>) => {
       const pageId = action.payload.pageId;

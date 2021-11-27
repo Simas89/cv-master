@@ -49,10 +49,13 @@ export const NextLinkComposed = React.forwardRef(function NextLinkComposed(
     </NextLink>
   );
 });
-
-// A styled version of the Next.js Link component:
-// https://nextjs.org/docs/#with-link
-const Link = React.forwardRef(function Link(props, ref) {
+interface LinkProps {
+  href: string;
+  children: React.ReactNode;
+  noLinkStyle?: boolean;
+  activeClassName?: string;
+}
+const Link = React.forwardRef(function Link(props: LinkProps, ref) {
   const {
     activeClassName = 'active',
     as: linkAs,

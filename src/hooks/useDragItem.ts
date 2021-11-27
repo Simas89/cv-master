@@ -1,31 +1,31 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from 'react';
 
-const useDragItem = (callback: () => void) => {
+const useDragItem = (maxDelta: number, callback: () => void) => {
   const [dragDelta, setDragDelta] = useState(0);
   const initX = useRef(0);
   const initY = useRef(0);
 
   useEffect(() => {
-    if (dragDelta > 40) {
+    if (dragDelta > maxDelta) {
       removeListeners();
       callback();
     }
   }, [dragDelta]);
 
   const addUpListener = useCallback(() => {
-    window.addEventListener("mouseup", removeListeners);
+    window.addEventListener('mouseup', removeListeners);
   }, []);
 
   const addMoveListener = useCallback(() => {
-    window.addEventListener("mousemove", trackPosition);
+    window.addEventListener('mousemove', trackPosition);
   }, []);
 
   const removeUpListener = useCallback(() => {
-    window.removeEventListener("mouseup", removeListeners);
+    window.removeEventListener('mouseup', removeListeners);
   }, []);
 
   const removeMoveListener = useCallback(() => {
-    window.removeEventListener("mousemove", trackPosition);
+    window.removeEventListener('mousemove', trackPosition);
   }, []);
 
   const trackPosition = (e: MouseEvent) => {
@@ -51,6 +51,10 @@ const useDragItem = (callback: () => void) => {
     addUpListener();
     addMoveListener();
   };
+
+  useEffect(() => {
+    return () => removeListeners();
+  }, []);
 
   return { initMouse, isDrag: Boolean(dragDelta) };
 };

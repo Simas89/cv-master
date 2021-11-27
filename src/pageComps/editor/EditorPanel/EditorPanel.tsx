@@ -1,15 +1,15 @@
-import React, { Fragment } from "react";
-import styled from "styled-components";
-import useActionsField from "state/actionHooks/useActionsField";
-import { useStateSelector } from "state/typedHooks";
-import { Box, Fab } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import Page from "./Page";
-import { pagesSelector } from "state";
-import isEqual from "lodash.isequal";
-import useActionsInventory from "state/actionHooks/useActionsInventory";
-import generateId from "util/generateId";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { Fragment } from 'react';
+import styled from 'styled-components';
+import useActionsField from 'state/actionHooks/useActionsField';
+import { useStateSelector } from 'state/typedHooks';
+import { Box, Fab } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import Page from './Page';
+import { pagesSelector } from 'state';
+import isEqual from 'lodash.isequal';
+import useActionsInventory from 'state/actionHooks/useActionsInventory';
+import generateId from 'util/generateId';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Div = styled.div`
   height: 100%;
@@ -18,10 +18,8 @@ const Div = styled.div`
   flex-direction: column;
   align-items: center;
   overflow-y: scroll;
-  border: 2px solid green;
-  /* zoom: 100%; */
+
   .pages {
-    border: 1px solid red;
     display: flex;
 
     align-items: center;
@@ -57,9 +55,9 @@ const EditorPanel = () => {
   return (
     <MotionDiv>
       <Box m={1} />
-      <motion.div className="pages" animate={{ zoom }}>
+      <motion.div className='pages' animate={{ zoom }}>
         {pages.map((el, idx) => (
-          <div key={"key" + idx}>
+          <div key={'key' + idx}>
             <Box m={6 * invertZoomValue(zoom)} />
             <Page
               pageId={el.pageId}
@@ -70,7 +68,7 @@ const EditorPanel = () => {
         ))}
       </motion.div>
       <Box m={3} />
-      <Fab variant="extended" onClick={createNewPage} className="btn-add-page">
+      <Fab variant='extended' onClick={createNewPage} className='btn-add-page'>
         <AddIcon sx={{ mr: 1, mt: 1, mb: 1 }} />
         ADD PAGE
       </Fab>

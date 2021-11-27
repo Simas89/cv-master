@@ -33,7 +33,7 @@ export const ItemWrapper: React.FC<ItemWrapperProps> = ({
     setModifyMode({ isOn: true, ...item });
   };
 
-  const { initMouse, isDrag } = useDragItem(onDragPulled);
+  const { initMouse, isDrag } = useDragItem(40, onDragPulled);
 
   return (
     <MotionDiv

@@ -1,10 +1,10 @@
-import { flexCenter } from "common/css";
-import React from "react";
-import { blockSelector } from "state";
-import useActionsField from "state/actionHooks/useActionsField";
-import { useStateSelector } from "state/typedHooks";
-import styled, { css } from "styled-components";
-import isEqual from "lodash.isequal";
+import { flexCenter } from 'common/css';
+import React from 'react';
+import { blockSelector } from 'state';
+import useActionsField from 'state/actionHooks/useActionsField';
+import { useStateSelector } from 'state/typedHooks';
+import styled, { css } from 'styled-components';
+import isEqual from 'lodash.isequal';
 
 interface DivProps {
   size: number;
@@ -35,18 +35,18 @@ const Div = styled.div<DivProps>`
     background-color: ${({ isFree, highlightFreeSpace, isInModifyMode }) =>
       highlightFreeSpace && !isInModifyMode
         ? isFree
-          ? "RGBA(0, 171, 101,0.1)"
-          : "RGBA(227, 24, 54,0.1)"
-        : "RGBA(0, 0, 0,0)"};
+          ? 'RGBA(0, 171, 101,0.1)'
+          : 'RGBA(227, 24, 54,0.1)'
+        : 'RGBA(0, 0, 0,0)'};
   }
 
   .ispassing-indicator {
     background-color: ${({ isPassing, highlightFreeSpace, isInModifyMode }) =>
       highlightFreeSpace && isInModifyMode
         ? isPassing
-          ? "RGBA(0, 171, 101,0.3)"
-          : "RGBA(227, 24, 54,0.3)"
-        : "RGBA(0, 0, 0,0)"};
+          ? 'RGBA(0, 171, 101,0.3)'
+          : 'RGBA(227, 24, 54,0.3)'
+        : 'RGBA(0, 0, 0,0)'};
   }
 `;
 
@@ -83,8 +83,8 @@ export const Block = React.memo<BlockProps>(({ hBlock, vBlock, pageId }) => {
       highlightFreeSpace={isOn}
       isPassing={isPassing}
     >
-      <div className="isfree-indicator indicator" />
-      <div className="ispassing-indicator indicator" />
+      <div className='isfree-indicator indicator' />
+      <div className='ispassing-indicator indicator' />
     </Div>
   );
 });

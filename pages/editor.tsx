@@ -53,7 +53,7 @@ const Editor: NextPage = () => {
       loadNewComponentsPage({ pageId: el.pageId, components: el.components });
       addNewFieldPage(el.pageId);
     });
-  }, []);
+  }, [addNewFieldPage, loadNewComponentsPage]);
 
   return (
     <Div>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useStateSelector } from 'state';
 import styled from 'styled-components';
 import { ComponentType } from 'types';
 import Placeholder from '../Placeholder';

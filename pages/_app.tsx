@@ -14,7 +14,7 @@ import Layout from 'components/Layout';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
-interface AppPropsMod extends AppProps {
+interface AppPropsEnchanted extends AppProps {
   emotionCache: EmotionCache;
 }
 
@@ -22,7 +22,7 @@ const MyApp = ({
   Component,
   pageProps,
   emotionCache = clientSideEmotionCache,
-}: AppPropsMod) => {
+}: AppPropsEnchanted) => {
   return (
     <>
       <MuiThemeProvider theme={theme}>

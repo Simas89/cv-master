@@ -4,6 +4,7 @@ import { IconButton } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import { useStateSelector } from 'state';
+import useDragItem from 'hooks/useDragItem';
 
 interface DivProps {
   isShifted: boolean;
@@ -47,20 +48,26 @@ const Div = styled.div<DivProps>`
 
 interface MiniMenuProps {
   removeComponent: () => void;
+  onDragPulled: () => void;
   isShifted: boolean;
 }
 
 export const MiniMenu: React.FC<MiniMenuProps> = ({
   isShifted,
   removeComponent,
+  onDragPulled,
 }) => {
   const blockSize = useStateSelector(({ field }) => field.blockSize);
+  const { initMouse } = useDragItem(10, onDragPulled);
+
   return (
     <Div isShifted={isShifted} blockSize={blockSize}>
+      {/* @ts-ignore */}
       <IconButton
         size='small'
         className='floating-btn drag-btn'
         color='secondary'
+        onMouseDown={initMouse}
       >
         <DragIndicatorIcon />
       </IconButton>

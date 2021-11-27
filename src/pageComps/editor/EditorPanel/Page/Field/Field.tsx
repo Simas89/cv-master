@@ -6,16 +6,18 @@ import { FieldGrid, Row } from './';
 import { Paper } from '@mui/material';
 import { flexCenter } from 'common/css';
 import isEqual from 'lodash.isequal';
-import useIsomorphicLayoutEffect from 'hooks/useIsomorphicLayoutEffect';
-import useActionsField from 'state/actionHooks/useActionsField';
 import ComponentWrapper from 'components/ComponentWrapper';
 
 interface FieldDivProps {
   dimensions: { width: number; height: number };
 }
 const FieldDiv = styled(Paper).attrs({ elevation: 20 })<FieldDivProps>`
+  /* TO-DO print left side is cut off*/
+  margin-left: 1px;
+
   position: relative;
   overflow: hidden;
+  background-color: #fffefe;
   ${flexCenter()};
 
   ${({ dimensions }) =>
@@ -36,33 +38,16 @@ interface FieldProps {
 }
 
 const Field: React.FC<FieldProps> = ({ pageId, reference = null }) => {
-  const fieldDimensions = useStateSelector(
-    ({ field }) => field.fieldDimensions,
+  const { components, fieldDimensions } = useStateSelector(
+    ({ inventory, field }) => {
+      const comps = inventory.pages[pageId].components;
+      return {
+        fieldDimensions: field.fieldDimensions,
+        components: Object.keys(comps).map((k) => k),
+      };
+    },
     isEqual
   );
-
-  const components = useStateSelector(({ inventory }) => {
-    const comps = inventory.pages[pageId].components;
-    return Object.keys(comps).map((k) => {
-      return { componentId: k, ...comps[k] };
-    });
-  }, isEqual);
-
-  console.log(components);
-
-  const { setComponentSpaceIsFree } = useActionsField();
-
-  useIsomorphicLayoutEffect(() => {
-    const componentsDimensions = components.map((el) => {
-      return {
-        height: el.height,
-        width: el.width,
-        hLocation: el.hLocation,
-        vLocation: el.vLocation,
-      };
-    });
-    setComponentSpaceIsFree({ isFree: false, pageId, componentsDimensions });
-  }, [components]);
 
   return (
     <FieldDiv ref={reference} dimensions={fieldDimensions}>
@@ -75,12 +60,7 @@ const Field: React.FC<FieldProps> = ({ pageId, reference = null }) => {
           <ComponentWrapper
             key={'comp' + idx}
             pageId={pageId}
-            componentId={el.componentId}
-            componentType={el.componentType}
-            height={el.height}
-            width={el.width}
-            hLocation={el.hLocation}
-            vLocation={el.vLocation}
+            componentId={el}
           />
         ))}
       </div>

@@ -1,4 +1,4 @@
-name: Test and deploy to PROD
+name: Test-deploy-prod
 
 on:
   push:

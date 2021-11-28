@@ -30,7 +30,7 @@ const Div = styled.div<ComponentWrapperPosition>`
     opacity: ${isBeingDragged ? 0.5 : 1};
   `};
 
-  transition: 0.2s;
+  /* transition: 0.2s; */
 `;
 
 interface ComponentWrapperPosition {

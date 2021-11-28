@@ -8,13 +8,6 @@ interface Block {
   isInModifyMode: boolean;
 }
 
-interface SetFreeProps {
-  hBlock: number;
-  vBlock: number;
-  free: boolean;
-  pageId: string;
-}
-
 interface SetModifyModeProps {
   isOn?: boolean;
   pageId?: string;
@@ -22,6 +15,7 @@ interface SetModifyModeProps {
   componentType?: ComponentType;
   isPassing?: boolean;
   memoize?: boolean;
+  memoPageId?: string;
   width?: number;
   height?: number;
   hLocation?: number;
@@ -39,11 +33,11 @@ interface ComponentDimensions {
   }[];
 }
 
-export enum fieldDimensionsWidth {
+enum fieldDimensionsWidth {
   MEDIUM = 794, //96 - 794
   LARGE = 992, //120 - 992
 }
-export enum fieldDimensionsHeight {
+enum fieldDimensionsHeight {
   MEDIUM = 1123, //96 - 1123
   LARGE = 1403, //120 - 1403
 }
@@ -63,11 +57,12 @@ interface FieldState {
     componentId: string;
     componentType: ComponentType;
     isPassing: boolean;
-    memoize: boolean;
     width: number;
     height: number;
     hLocation: number;
     vLocation: number;
+    memoize: boolean;
+    memoPageId: string;
     memoHLocation: number;
     memoVLocation: number;
   };
@@ -99,8 +94,8 @@ const generateNewField = (): Block[][] => {
 const initialState: FieldState = {
   pages: {},
   fieldDimensions: {
-    width: fieldDimensionsWidth.MEDIUM,
-    height: fieldDimensionsHeight.MEDIUM,
+    width: fieldDimensionsWidth.LARGE,
+    height: fieldDimensionsHeight.LARGE,
   },
   blockSize: 40,
   modifyMode: {
@@ -109,15 +104,16 @@ const initialState: FieldState = {
     componentId: '',
     componentType: ComponentType.NULL,
     isPassing: false,
-    memoize: false,
     width: 0,
     height: 0,
     hLocation: 0,
     vLocation: 0,
+    memoize: false,
+    memoPageId: '',
     memoHLocation: 0,
     memoVLocation: 0,
   },
-  zoom: 1,
+  zoom: 0.5,
   showGrid: true,
 };
 
@@ -146,31 +142,21 @@ export const slice = createSlice({
       state.showGrid = action.payload;
     },
 
-    setFieldDimensions: (
-      state,
-      action: PayloadAction<{
-        width: fieldDimensionsWidth;
-        height: fieldDimensionsHeight;
-      }>
-    ) => {
-      state.fieldDimensions = action.payload;
-    },
-
     setBlockSize: (state, action: PayloadAction<number>) => {
       state.blockSize = action.payload;
-    },
-
-    setIsFree: (state, action: PayloadAction<SetFreeProps>) => {
-      const { hBlock, vBlock, pageId, free } = action.payload;
-      state.pages[pageId].field[hBlock][vBlock].isFree = free;
     },
 
     setModifyMode: (state, action: PayloadAction<SetModifyModeProps>) => {
       const currentModifyMode = current(state.modifyMode);
 
-      const memoInit: { memoHLocation?: number; memoVLocation?: number } = {};
+      const memoInit: {
+        memoPageId?: string;
+        memoHLocation?: number;
+        memoVLocation?: number;
+      } = {};
       const memoize = action.payload.memoize;
       if (memoize) {
+        memoInit.memoPageId = action.payload.pageId;
         memoInit.memoHLocation = action.payload.hLocation;
         memoInit.memoVLocation = action.payload.vLocation;
       }
@@ -232,6 +218,8 @@ export const slice = createSlice({
       const pageId = action.payload.pageId;
       const isFree = action.payload.isFree;
 
+      console.log('!!!', pageId);
+
       componentsDimensions.forEach((el) => {
         const height = el.height;
         const width = el.width;
@@ -270,9 +258,7 @@ export const {
   deletePage,
   setZoom,
   setShowGrid,
-  setFieldDimensions,
   setBlockSize,
-  setIsFree,
   setModifyMode,
   checkSlot,
   setComponentSpaceIsFree,

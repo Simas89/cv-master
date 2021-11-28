@@ -1,8 +1,10 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import { ComponentType } from 'types';
+import { generateId } from 'util/generateId';
 
 export interface Component {
   componentType: ComponentType;
+  timeStamp?: number | null;
   width: number;
   height: number;
   hLocation: number;
@@ -100,11 +102,18 @@ export const slice = createSlice({
     },
     addComponent: (state, action: PayloadAction<SetComponentProps>) => {
       const pageId = action.payload.pageId;
-      const componentId = action.payload.componentId;
+      const component = action.payload.component;
+      const componentId =
+        action.payload.componentId || generateId(component.componentType);
+
+      if (!component.timeStamp) component.timeStamp = new Date().getTime();
+
+      // console.log(isNew);
+      // console.log(new Date().getTime());
 
       state.pages[pageId].components[componentId] = {
         ...state.pages[pageId].components[componentId],
-        ...action.payload.component,
+        ...component,
       };
     },
     deleteComponent: (state, action: PayloadAction<DeleteComponentProps>) => {

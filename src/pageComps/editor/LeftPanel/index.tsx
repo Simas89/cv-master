@@ -1,2 +1,1 @@
-export { default } from "./LeftPanel";
-export * from "./ItemWrapper";
+export { default } from './LeftPanel';

@@ -1,34 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Button } from '@mui/material';
 import styled from 'styled-components';
-import { ComponentType } from 'types';
 import Placeholder from '../Placeholder';
-import { ItemWrapper } from './';
+import { Box } from '@mui/system';
+import Library from './Library';
+import OnPage from './OnPage';
+import PanelWraper from 'components/PanelWrapper';
 
-const Div = styled.div`
-  padding: 15px;
-  width: 300px;
-  height: 100%;
-  flex-shrink: 0;
-  border: 1px solid gray;
+const StyledPanelWraper = styled(PanelWraper)`
+  .navigation {
+    display: flex;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid gray;
+    /* border: 1px solid red; */
+  }
 `;
 
+enum Tabs {
+  LIBRARY,
+  ONPAGE,
+}
+
+const isSelected = (target: Tabs, state: Tabs) => {
+  return target === state ? 'contained' : 'outlined';
+};
+
 const LeftPanel = () => {
-  const items = [
-    { width: 5, height: 2, componentType: ComponentType.ITEM_A },
-    { width: 7, height: 3, componentType: ComponentType.ITEM_B },
-    { width: 10, height: 5, componentType: ComponentType.ITEM_C },
-  ];
+  const [tab, setTab] = useState<Tabs>(0);
+
   return (
-    <Div>
+    <StyledPanelWraper>
       <Placeholder />
-      {items.map((el, idx) => (
-        <ItemWrapper key={'item' + idx} item={el}>
-          <span>
-            {el.width}x{el.height}
-          </span>
-        </ItemWrapper>
-      ))}
-    </Div>
+      <div className='navigation'>
+        <Button
+          onClick={() => setTab(Tabs.LIBRARY)}
+          size='small'
+          variant={isSelected(Tabs.LIBRARY, tab)}
+          fullWidth
+        >
+          Library
+        </Button>
+        <Box m={1} />
+        <Button
+          onClick={() => setTab(Tabs.ONPAGE)}
+          size='small'
+          variant={isSelected(Tabs.ONPAGE, tab)}
+          fullWidth
+        >
+          On page
+        </Button>
+      </div>
+      {tab === Tabs.LIBRARY && <Library />}
+      {tab === Tabs.ONPAGE && <OnPage />}
+    </StyledPanelWraper>
   );
 };
 

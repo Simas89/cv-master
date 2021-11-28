@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import React from 'react';
+import styled from 'styled-components';
 import useActionsField from 'state/actionHooks/useActionsField';
-import {
-  fieldDimensionsHeight,
-  fieldDimensionsWidth,
-} from 'state/reducers/field';
-import { Button, Checkbox, FormControlLabel, Slider } from '@mui/material';
+import { Checkbox, FormControlLabel, Slider } from '@mui/material';
 import { useStateSelector } from 'state';
 import { PrintAll } from './PrintAll';
+import PanelWraper from 'components/PanelWrapper';
 
-const Div = styled.div`
+const StyledPanelWraper = styled(PanelWraper)`
   position: relative;
   padding: 15px;
   width: 300px;
@@ -21,20 +18,7 @@ const Div = styled.div`
 const RightPanel = () => {
   const zoom = useStateSelector(({ field }) => field.zoom);
   const showGrid = useStateSelector(({ field }) => field.showGrid);
-  const { setFieldDimensions, setZoom, setShowGrid } = useActionsField();
-
-  const handleMediumClick = () => {
-    setFieldDimensions({
-      width: fieldDimensionsWidth.MEDIUM,
-      height: fieldDimensionsHeight.MEDIUM,
-    });
-  };
-  const handleLargeClick = () => {
-    setFieldDimensions({
-      width: fieldDimensionsWidth.LARGE,
-      height: fieldDimensionsHeight.LARGE,
-    });
-  };
+  const { setZoom, setShowGrid } = useActionsField();
 
   // @ts-ignore
   const handleSetZoom = (e) => {
@@ -43,11 +27,9 @@ const RightPanel = () => {
   };
 
   return (
-    <Div>
+    <StyledPanelWraper>
       <PrintAll />
       <br />
-      <Button onClick={handleMediumClick}>96 DPI</Button>
-      <Button onClick={handleLargeClick}>120 DPI</Button>
       <Slider
         value={zoom}
         onChange={handleSetZoom}
@@ -67,7 +49,7 @@ const RightPanel = () => {
         }
         label='Show grid'
       />
-    </Div>
+    </StyledPanelWraper>
   );
 };
 

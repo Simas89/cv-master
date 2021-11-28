@@ -8,7 +8,7 @@ import Page from './Page';
 import { pagesSelector } from 'state';
 import isEqual from 'lodash.isequal';
 import useActionsInventory from 'state/actionHooks/useActionsInventory';
-import generateId from 'util/generateId';
+import { generateId } from 'util/generateId';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Div = styled.div`
@@ -47,7 +47,7 @@ const EditorPanel = () => {
   const { loadNewComponentsPage } = useActionsInventory();
 
   const createNewPage = () => {
-    const pageId = generateId();
+    const pageId = generateId('PAGE');
     loadNewComponentsPage({ pageId });
     addNewFieldPage(pageId);
   };

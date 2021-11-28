@@ -58,7 +58,7 @@ export const MiniMenu: React.FC<MiniMenuProps> = ({
   onDragPulled,
 }) => {
   const blockSize = useStateSelector(({ field }) => field.blockSize);
-  const { initMouse } = useDragItem(10, onDragPulled);
+  const { initMouse } = useDragItem(5, onDragPulled);
 
   return (
     <Div isShifted={isShifted} blockSize={blockSize}>

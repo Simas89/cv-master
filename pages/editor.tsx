@@ -26,6 +26,7 @@ const pagesData = [
     components: {
       randomIdOne: {
         componentType: ComponentType.ITEM_A,
+        timeStamp: 123,
         width: 5,
         height: 2,
         hLocation: 3,
@@ -33,6 +34,7 @@ const pagesData = [
       },
       randomIdTwo: {
         componentType: ComponentType.ITEM_B,
+        timeStamp: 456,
         width: 7,
         height: 3,
         hLocation: 4,

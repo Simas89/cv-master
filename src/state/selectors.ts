@@ -2,9 +2,9 @@ import {
   createSelector,
   createSelectorCreator,
   defaultMemoize,
-} from "reselect";
-import { RootState } from "./store";
-import isEqual from "lodash.isequal";
+} from 'reselect';
+import { RootState } from './store';
+import isEqual from 'lodash.isequal';
 
 const createDeepEqualSelector = createSelectorCreator(defaultMemoize, isEqual);
 
@@ -14,6 +14,7 @@ interface BlockSelectorProps {
   pageId: string;
 }
 
+// OnPage EditorPanel
 export const pagesSelector = createSelector(
   (state: RootState) => state.inventory.pages,
   (pages) =>

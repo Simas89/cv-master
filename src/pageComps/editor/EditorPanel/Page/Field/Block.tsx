@@ -60,11 +60,7 @@ export const Block = React.memo<BlockProps>(({ hBlock, vBlock, pageId }) => {
   const { blockSize, isOn, isPassing, isInModifyMode, isAlive, isFree } =
     useStateSelector(blockSelector({ hBlock, vBlock, pageId }), isEqual);
 
-  const { checkSlot, setIsFree } = useActionsField();
-
-  const handleClick = () => {
-    setIsFree({ vBlock, hBlock, pageId, free: !isFree });
-  };
+  const { checkSlot } = useActionsField();
 
   const handleMouseEnter = () => {
     if (isOn) {
@@ -75,7 +71,6 @@ export const Block = React.memo<BlockProps>(({ hBlock, vBlock, pageId }) => {
   return (
     <Div
       size={blockSize}
-      onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       isAlive={isAlive}
       isFree={isFree}

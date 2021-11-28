@@ -22,8 +22,8 @@ const NoStyleLink = styled(Link)`
 const Game = () => {
   return (
     <Div data-cy='home_page'>
-      <NoStyleLink href='editor'>
-        <h1>CREATE</h1>
+      <NoStyleLink href='/editor'>
+        <h1>START</h1>
       </NoStyleLink>
       <GameOfLife />
     </Div>

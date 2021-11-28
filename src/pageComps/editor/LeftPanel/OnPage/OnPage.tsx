@@ -37,7 +37,7 @@ const CompList: React.FC<CompListProps> = ({ pageId }) => {
           timeStamp: comps[k].timeStamp,
         };
       })
-      .sort((a, b) => b.timeStamp - a.timeStamp);
+      .sort((a, b) => Number(b.timeStamp) - Number(a.timeStamp));
   }, isEqual);
 
   console.log(components);

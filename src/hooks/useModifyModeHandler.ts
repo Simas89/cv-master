@@ -35,7 +35,7 @@ const useModifyModeHandler = () => {
   const createComponent = () => {
     const component = {
       componentType,
-      timestamp: null,
+      timeStamp: null,
       width,
       height,
       hLocation,

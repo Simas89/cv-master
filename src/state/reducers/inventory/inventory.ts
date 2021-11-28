@@ -4,7 +4,7 @@ import { generateId } from 'util/generateId';
 
 export interface Component {
   componentType: ComponentType;
-  timeStamp: number | null;
+  timeStamp?: number | null;
   width: number;
   height: number;
   hLocation: number;

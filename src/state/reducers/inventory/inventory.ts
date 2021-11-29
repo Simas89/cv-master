@@ -30,10 +30,18 @@ interface InventoryState {
       };
     };
   };
+  selectedComponent: {
+    pageId: string;
+    componentId: string;
+  };
 }
 
 const initialState: InventoryState = {
   pages: {},
+  selectedComponent: {
+    pageId: '',
+    componentId: '',
+  },
 };
 
 interface LoadNewComponentsPageProps {
@@ -82,8 +90,6 @@ export const slice = createSlice({
       const obj = current(state.pages);
       const currentOrder = state.pages[pageId].order;
 
-      console.log(obj);
-
       if (direction === 'DOWN') {
         const neighbourId = Object.keys(obj).filter(
           (k) => obj[k].order === currentOrder + 1
@@ -100,6 +106,7 @@ export const slice = createSlice({
         state.pages[neighbourId].order++;
       }
     },
+
     addComponent: (state, action: PayloadAction<SetComponentProps>) => {
       const pageId = action.payload.pageId;
       const component = action.payload.component;
@@ -108,19 +115,24 @@ export const slice = createSlice({
 
       if (!component.timeStamp) component.timeStamp = new Date().getTime();
 
-      // console.log(isNew);
-      // console.log(new Date().getTime());
-
       state.pages[pageId].components[componentId] = {
         ...state.pages[pageId].components[componentId],
         ...component,
       };
     },
+
     deleteComponent: (state, action: PayloadAction<DeleteComponentProps>) => {
       const pageId = action.payload.pageId;
       const componentId = action.payload.componentId;
 
       delete state.pages[pageId].components[componentId];
+    },
+
+    setSelectedComponent: (
+      state,
+      action: PayloadAction<{ pageId: string; componentId: string }>
+    ) => {
+      state.selectedComponent = action.payload;
     },
   },
 });
@@ -131,6 +143,7 @@ export const {
   swapPage,
   addComponent,
   deleteComponent,
+  setSelectedComponent,
 } = slice.actions;
 
 export default slice.reducer;

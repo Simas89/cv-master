@@ -12,7 +12,7 @@ interface DivProps {
 }
 const Div = styled.div<DivProps>`
   display: flex;
-  border: 1px solid red;
+  /* border: 1px solid red; */
   /* height: 50px; */
   width: 100px;
   position: relative;
@@ -66,7 +66,6 @@ export const MiniMenu: React.FC<MiniMenuProps> = ({
       <IconButton
         size='small'
         className='floating-btn drag-btn'
-        color='secondary'
         onMouseDown={initMouse}
       >
         <DragIndicatorIcon />
@@ -75,7 +74,6 @@ export const MiniMenu: React.FC<MiniMenuProps> = ({
         size='small'
         onClick={removeComponent}
         className='floating-btn delete-btn'
-        color='secondary'
       >
         <HighlightOffIcon />
       </IconButton>

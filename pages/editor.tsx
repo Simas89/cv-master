@@ -21,7 +21,7 @@ const Div = styled.div`
 
 const pagesData = [
   {
-    pageId: 'kwcetwjy12cd598f8',
+    pageId: 'PAGE_1_jy12cd598f8',
     order: 1,
     components: {
       randomIdOne: {
@@ -42,7 +42,7 @@ const pagesData = [
       },
     },
   },
-  { pageId: 'kwcetwk8773371db2', order: 2 },
+  { pageId: 'PAGE_2_k8773371db2', order: 2 },
 ];
 
 const Editor: NextPage = () => {

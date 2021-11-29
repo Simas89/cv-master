@@ -218,8 +218,6 @@ export const slice = createSlice({
       const pageId = action.payload.pageId;
       const isFree = action.payload.isFree;
 
-      console.log('!!!', pageId);
-
       componentsDimensions.forEach((el) => {
         const height = el.height;
         const width = el.width;

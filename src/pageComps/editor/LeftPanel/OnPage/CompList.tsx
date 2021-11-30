@@ -64,7 +64,7 @@ export const CompList: React.FC<CompListProps> = ({ pageId }) => {
   };
   return (
     <CompListDiv>
-      {components.map((el, idx) => (
+      {components.map((el) => (
         <ItemDiv
           onClick={() => selectComponent(el.componentId)}
           key={keyGen()}

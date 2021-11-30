@@ -43,11 +43,13 @@ const useModifyModeHandler = () => {
     };
     const componentsDimensions = [{ height, width, hLocation, vLocation }];
 
-    if (pageId) addComponent({ pageId, componentId, component });
-    else {
+    if (pageId) {
+      addComponent({ pageId, componentId, component });
+    } else {
       setSpace({ isFree: false, pageId, componentsDimensions });
     }
 
+    // component moved outside the page and needs to be creared from the current
     if (memoPageId && memoPageId !== pageId) {
       setSpace({ isFree: true, pageId: memoPageId, componentsDimensions });
       deleteComponent({ pageId: memoPageId, componentId });
@@ -103,7 +105,15 @@ const useModifyModeHandler = () => {
     return () => {
       window.removeEventListener('mouseup', onMouseUp);
     };
-  }, [setModifyMode, isOn, isPassing, createComponent, resetComponent]);
+  }, [
+    setModifyMode,
+    isOn,
+    isPassing,
+    createComponent,
+    resetComponent,
+    pageId,
+    componentId,
+  ]);
 };
 
 export default useModifyModeHandler;

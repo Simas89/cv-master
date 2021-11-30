@@ -17,42 +17,42 @@ const StyledPanelWraper = styled(PanelWraper)`
   }
 `;
 
-enum Tabs {
+enum TabsLeft {
   LIBRARY,
   ONPAGE,
 }
 
-const isSelected = (target: Tabs, state: Tabs) => {
+const isSelected = (target: TabsLeft, state: TabsLeft) => {
   return target === state ? 'contained' : 'outlined';
 };
 
 const LeftPanel = () => {
-  const [tab, setTab] = useState<Tabs>(0);
+  const [tab, setTab] = useState<TabsLeft>(0);
 
   return (
     <StyledPanelWraper>
       <Placeholder />
       <div className='navigation'>
         <Button
-          onClick={() => setTab(Tabs.LIBRARY)}
+          onClick={() => setTab(TabsLeft.LIBRARY)}
           size='small'
-          variant={isSelected(Tabs.LIBRARY, tab)}
+          variant={isSelected(TabsLeft.LIBRARY, tab)}
           fullWidth
         >
           Library
         </Button>
         <Box m={1} />
         <Button
-          onClick={() => setTab(Tabs.ONPAGE)}
+          onClick={() => setTab(TabsLeft.ONPAGE)}
           size='small'
-          variant={isSelected(Tabs.ONPAGE, tab)}
+          variant={isSelected(TabsLeft.ONPAGE, tab)}
           fullWidth
         >
           On page
         </Button>
       </div>
-      {tab === Tabs.LIBRARY && <Library />}
-      {tab === Tabs.ONPAGE && <OnPage />}
+      {tab === TabsLeft.LIBRARY && <Library />}
+      {tab === TabsLeft.ONPAGE && <OnPage />}
     </StyledPanelWraper>
   );
 };

@@ -1,5 +1,5 @@
 import { MiniMenu } from './';
-import React, { useState } from 'react';
+import React from 'react';
 import { useStateSelector } from 'state';
 import useActionsField from 'state/actionHooks/useActionsField';
 import useActionsInventory from 'state/actionHooks/useActionsInventory';
@@ -7,7 +7,6 @@ import styled, { css } from 'styled-components';
 import isEqual from 'lodash.isequal';
 import useIsomorphicLayoutEffect from 'hooks/useIsomorphicLayoutEffect';
 import useCreateFreeSpace from 'hooks/useCreateFreeSpace';
-import { ComponentType } from 'types';
 
 interface ComponentWrapperPosition {
   height: number;
@@ -55,14 +54,13 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
   pageId,
   componentId,
 }) => {
-  const [showMenu, setShowMenu] = useState(false);
-
   const {
     blockSize,
     isModifyModeOn,
     isBeingDragged,
     selectedComponent,
     component,
+    componentsDimensions,
   } = useStateSelector(({ inventory, field }) => {
     const comp = inventory.pages[pageId].components[componentId];
     return {
@@ -77,27 +75,26 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
         hLocation: comp.hLocation,
         vLocation: comp.vLocation,
       },
+      componentsDimensions: [
+        {
+          height: comp.height,
+          width: comp.width,
+          hLocation: comp.hLocation,
+          vLocation: comp.vLocation,
+        },
+      ],
     };
   }, isEqual);
 
   const { height, width, hLocation, vLocation, componentType } = component;
 
-  const { deleteComponent, setSelectedComponent } = useActionsInventory();
+  const { setSelectedComponent } = useActionsInventory();
   const { setModifyMode } = useActionsField();
   const setSpace = useCreateFreeSpace();
-
-  const componentsDimensions = [component];
-  // @ts-ignore
-  delete componentsDimensions[0].componentType;
 
   useIsomorphicLayoutEffect(() => {
     setSpace({ isFree: false, pageId, componentsDimensions });
   }, [height, width, hLocation, vLocation]);
-
-  const removeComponent = () => {
-    setSpace({ isFree: true, pageId, componentsDimensions });
-    deleteComponent({ pageId, componentId });
-  };
 
   const onDragPulled = () => {
     setSpace({ isFree: true, pageId, componentsDimensions });
@@ -138,16 +135,10 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
       isModifyModeOn={isModifyModeOn}
       isBeingDragged={isBeingDragged}
       isSelected={checkIfSelected()}
-      onMouseEnter={() => setShowMenu(true)}
-      onMouseLeave={() => setShowMenu(false)}
       onClick={selectComponent}
     >
-      {showMenu && (
-        <MiniMenu
-          removeComponent={removeComponent}
-          onDragPulled={onDragPulled}
-          isShifted={vLocation === 0}
-        />
+      {checkIfSelected() && (
+        <MiniMenu onDragPulled={onDragPulled} isShifted={vLocation === 0} />
       )}
     </Div>
   );

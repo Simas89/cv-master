@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
-import styled from "styled-components";
-import { Button } from "@mui/material";
-import { store } from "state";
-import Field from "../EditorPanel/Page/Field";
-import { useReactToPrint } from "react-to-print";
+import React, { useState, useRef } from 'react';
+import styled from 'styled-components';
+import { Button } from '@mui/material';
+import { store } from 'state';
+import Field from 'pageComps/editor/EditorPanel/Page/Field';
+import { useReactToPrint } from 'react-to-print';
 
 const getPages = () => {
   const pages = store.getState().inventory.pages;
@@ -41,7 +41,7 @@ export const PrintAll = () => {
     const pages = getPages();
     setPrintPages(pages);
     setTimeout(() => {
-      if (typeof handlePrint !== "undefined") handlePrint();
+      if (typeof handlePrint !== 'undefined') handlePrint();
     }, 100);
   };
 
@@ -49,20 +49,20 @@ export const PrintAll = () => {
     content: () => ref.current,
     // removeAfterPrint: true,
     onBeforePrint: () => {
-      console.log("before print");
+      console.log('before print');
       setPrintPages([]);
     },
-    onAfterPrint: () => console.log("after print"),
+    onAfterPrint: () => console.log('after print'),
   });
   return (
     <>
-      <Button variant="contained" onClick={handlePreparePrint}>
+      <Button variant='contained' onClick={handlePreparePrint} size='small'>
         Print all
       </Button>
 
       {printPages.length ? (
         <Printer>
-          <div ref={ref} className="print-window">
+          <div ref={ref} className='print-window'>
             {printPages.map((el) => (
               <Field key={el.pageId} pageId={el.pageId} />
             ))}

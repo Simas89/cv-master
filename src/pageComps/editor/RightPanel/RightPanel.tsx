@@ -1,54 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import useActionsField from 'state/actionHooks/useActionsField';
-import { Checkbox, FormControlLabel, Slider } from '@mui/material';
-import { useStateSelector } from 'state';
-import { PrintAll } from './PrintAll';
+import { Box, Button } from '@mui/material';
 import PanelWraper from 'components/PanelWrapper';
+import System from './System';
+import CompParams from './CompParams';
 
 const StyledPanelWraper = styled(PanelWraper)`
-  position: relative;
-  padding: 15px;
-  width: 300px;
-  height: 100%;
-  flex-shrink: 0;
-  border: 1px solid gray;
+  .navigation {
+    display: flex;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid gray;
+    /* border: 1px solid red; */
+  }
 `;
 
-const RightPanel = () => {
-  const zoom = useStateSelector(({ field }) => field.zoom);
-  const showGrid = useStateSelector(({ field }) => field.showGrid);
-  const { setZoom, setShowGrid } = useActionsField();
+enum TabsRight {
+  COMP_PARAMS,
+  SYSTEM,
+}
 
-  // @ts-ignore
-  const handleSetZoom = (e) => {
-    const value = Number(e.target.value);
-    setZoom(value);
-  };
+const isSelected = (target: TabsRight, state: TabsRight) => {
+  return target === state ? 'contained' : 'outlined';
+};
+
+const RightPanel = () => {
+  const [tab, setTab] = useState<TabsRight>(0);
 
   return (
     <StyledPanelWraper>
-      <PrintAll />
-      <br />
-      <Slider
-        value={zoom}
-        onChange={handleSetZoom}
-        defaultValue={1}
-        valueLabelDisplay='auto'
-        step={0.1}
-        // marks
-        min={0.5}
-        max={1.5}
-      />
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={showGrid}
-            onChange={() => setShowGrid(!showGrid)}
-          />
-        }
-        label='Show grid'
-      />
+      <div className='navigation'>
+        <Button
+          onClick={() => setTab(TabsRight.COMP_PARAMS)}
+          size='small'
+          variant={isSelected(TabsRight.COMP_PARAMS, tab)}
+          fullWidth
+        >
+          Component
+        </Button>
+        <Box m={1} />
+        <Button
+          onClick={() => setTab(TabsRight.SYSTEM)}
+          size='small'
+          variant={isSelected(TabsRight.SYSTEM, tab)}
+          fullWidth
+        >
+          System
+        </Button>
+      </div>
+      {tab === TabsRight.COMP_PARAMS && <CompParams />}
+      {tab === TabsRight.SYSTEM && <System />}
     </StyledPanelWraper>
   );
 };

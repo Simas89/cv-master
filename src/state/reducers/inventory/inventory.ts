@@ -4,17 +4,26 @@ import { generateId } from 'util/generateId';
 
 export interface Component {
   componentType: ComponentType;
-  timeStamp?: number | null;
+  isAbsolute: boolean;
   width: number;
   height: number;
   hLocation: number;
   vLocation: number;
+  timeStamp: number | null;
 }
 
 interface SetComponentProps {
   pageId: string;
   componentId: string;
-  component: Component;
+  component: {
+    componentType?: ComponentType;
+    isAbsolute?: boolean;
+    width?: number;
+    height?: number;
+    hLocation?: number;
+    vLocation?: number;
+    timeStamp?: number | null;
+  };
 }
 interface DeleteComponentProps {
   pageId: string;
@@ -66,6 +75,8 @@ export const slice = createSlice({
         order: length + 1,
         components,
       };
+      state.selectedComponent.pageId = pageId;
+      state.selectedComponent.componentId = '';
     },
 
     deleteComponentsPage: (state, action: PayloadAction<string>) => {
@@ -109,14 +120,23 @@ export const slice = createSlice({
       }
     },
 
-    addComponent: (state, action: PayloadAction<SetComponentProps>) => {
+    setComponent: (state, action: PayloadAction<SetComponentProps>) => {
       const pageId = action.payload.pageId;
       const component = action.payload.component;
+
+      // always provide componentID, if not provided, means its a new component
       const componentId =
         action.payload.componentId || generateId(component.componentType);
 
-      if (!component.timeStamp) component.timeStamp = new Date().getTime();
+      // if exists, hold a copy of the current component
+      const currentComponent =
+        current(state.pages[pageId]).components[componentId] || {};
 
+      // add timestamp if component is new
+      if (!currentComponent.timeStamp)
+        component.timeStamp = new Date().getTime();
+
+      // merge component
       state.pages[pageId].components[componentId] = {
         ...state.pages[pageId].components[componentId],
         ...component,
@@ -154,7 +174,7 @@ export const {
   loadNewComponentsPage,
   deleteComponentsPage,
   swapPage,
-  addComponent,
+  setComponent,
   deleteComponent,
   setSelectedComponent,
 } = slice.actions;

@@ -28,23 +28,24 @@ const useModifyModeHandler = () => {
   } = modifyMode;
 
   const { setModifyMode, resetSlotCheck } = useActionsField();
-  const { addComponent, deleteComponent } = useActionsInventory();
+  const { setComponent, deleteComponent } = useActionsInventory();
 
   const setSpace = useCreateFreeSpace();
 
   const createComponent = () => {
     const component = {
       componentType,
-      timeStamp: null,
+      isAbsolute: false,
       width,
       height,
       hLocation,
       vLocation,
     };
+
     const componentsDimensions = [{ height, width, hLocation, vLocation }];
 
     if (pageId) {
-      addComponent({ pageId, componentId, component });
+      setComponent({ pageId, componentId, component });
     } else {
       setSpace({ isFree: false, pageId, componentsDimensions });
     }
@@ -64,11 +65,8 @@ const useModifyModeHandler = () => {
       vLocation: memoVLocation,
     };
     const componentsDimensions = [dimensions];
-    const component = {
-      componentType,
-      ...dimensions,
-    };
-    addComponent({ pageId, componentId, component });
+
+    setComponent({ pageId, componentId, component: { ...dimensions } });
     setSpace({ isFree: false, pageId, componentsDimensions });
   };
 

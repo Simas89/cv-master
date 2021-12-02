@@ -70,6 +70,7 @@ const Field: React.FC<FieldProps> = ({
             key={'comp' + idx}
             pageId={pageId}
             componentId={el}
+            printMode={printMode}
           />
         ))}
       </div>

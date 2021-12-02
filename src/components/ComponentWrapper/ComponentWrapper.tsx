@@ -48,11 +48,13 @@ const Div = styled.div<ComponentWrapperPosition>`
 interface ComponentWrapperProps {
   pageId: string;
   componentId: string;
+  printMode: boolean | undefined;
 }
 
 const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
   pageId,
   componentId,
+  printMode,
 }) => {
   const {
     blockSize,
@@ -117,6 +119,7 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
   };
 
   const checkIfSelected = () => {
+    if (printMode) return false;
     if (
       componentId === selectedComponent.componentId &&
       pageId === selectedComponent.pageId

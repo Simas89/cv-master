@@ -12,9 +12,7 @@ const Div = styled.div`
   position: relative;
   height: 100vh;
   width: 100%;
-  max-width: 100vw;
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
   overflow: hidden;
 `;
@@ -47,13 +45,18 @@ const pagesData = [
 
 const Editor: NextPage = () => {
   const { addNewFieldPage } = useActionsField();
-  const { loadNewComponentsPage } = useActionsInventory();
+  const { loadNewComponentsPage, setSelectedComponent } = useActionsInventory();
 
   useEffect(() => {
     const pagesDataSorted = pagesData.sort((a, b) => a.order - b.order);
     pagesDataSorted.forEach((el) => {
       loadNewComponentsPage({ pageId: el.pageId, components: el.components });
       addNewFieldPage(el.pageId);
+    });
+
+    setSelectedComponent({
+      pageId: pagesDataSorted[0].pageId,
+      componentId: '',
     });
   }, [addNewFieldPage, loadNewComponentsPage]);
 

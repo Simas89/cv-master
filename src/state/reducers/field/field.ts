@@ -72,6 +72,7 @@ interface FieldState {
 
 export const H_BLOCKS = 16;
 export const V_BLOCKS = 23;
+export const BLOCK_SIZE = 62;
 
 const emptyBlock: Block = {
   isFree: true,
@@ -97,7 +98,7 @@ const initialState: FieldState = {
     width: fieldDimensionsWidth.LARGE,
     height: fieldDimensionsHeight.LARGE,
   },
-  blockSize: 40,
+  blockSize: 62,
   modifyMode: {
     isOn: false,
     pageId: '',

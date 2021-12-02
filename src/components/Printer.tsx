@@ -17,7 +17,7 @@ export interface PrinterRef extends HTMLDivElement {
 }
 
 interface PrinterRefInner {
-  handlePrint: (title: string) => any;
+  handlePrint: () => any;
 }
 
 interface PrinterProps {
@@ -61,5 +61,6 @@ const Printer: React.FC<PrinterProps> = React.forwardRef(
     );
   }
 );
+Printer.displayName = 'Printer';
 
 export default Printer;

@@ -1,7 +1,7 @@
-import React from "react";
-import { H_BLOCKS } from "state/reducers/field";
-import styled from "styled-components";
-import { Block } from "./";
+import React from 'react';
+import { H_BLOCKS } from 'state/reducers/field';
+import styled from 'styled-components';
+import { Block } from '.';
 
 const RowDiv = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ export const Row = React.memo<RowProps>(({ vBlock, pageId }) => {
     <RowDiv>
       {Array.apply(null, Array(H_BLOCKS)).map((_, idx) => (
         <Block
-          key={"iKey" + idx + vBlock}
+          key={'iKey' + idx + vBlock}
           vBlock={vBlock}
           hBlock={idx}
           pageId={pageId}

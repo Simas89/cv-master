@@ -79,6 +79,8 @@ export const slice = createSlice({
       belowPages.forEach((el) => state.pages[el].order--);
 
       delete state.pages[pageId];
+      state.selectedComponent.pageId = '';
+      state.selectedComponent.componentId = '';
     },
 
     swapPage: (
@@ -135,6 +137,15 @@ export const slice = createSlice({
       action: PayloadAction<{ pageId: string; componentId: string }>
     ) => {
       state.selectedComponent = action.payload;
+    },
+    setSelectedPage: (state, action: PayloadAction<string>) => {
+      const pageId = action.payload;
+      const currenPageId = current(state.selectedComponent).pageId;
+
+      if (pageId !== currenPageId) {
+        state.selectedComponent.componentId = '';
+      }
+      state.selectedComponent.pageId = pageId;
     },
   },
 });

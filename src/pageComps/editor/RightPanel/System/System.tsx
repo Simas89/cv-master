@@ -1,10 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import useActionsField from 'state/actionHooks/useActionsField';
-import { Box, Button, Checkbox, FormControlLabel, Slider } from '@mui/material';
+import { Checkbox, FormControlLabel, Slider } from '@mui/material';
 import { useStateSelector } from 'state';
 import { PrintAll } from './PrintAll';
-
 const Div = styled.div``;
 
 const System = () => {
@@ -17,6 +16,7 @@ const System = () => {
     const value = Number(e.target.value);
     setZoom(value);
   };
+
   return (
     <Div>
       <PrintAll />

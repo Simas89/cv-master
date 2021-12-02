@@ -1,9 +1,9 @@
-import { flexCenter } from "common/css";
-import React from "react";
-import useActionsGameOfLife from "state/actionHooks/useActionsGameOfLife";
-import { useStateSelector } from "state/typedHooks";
-import styled, { css } from "styled-components";
-import { motion } from "framer-motion";
+import { flexCenter } from 'common/css';
+import React from 'react';
+import useActionsGameOfLife from 'state/actionHooks/useActionsGameOfLife';
+import { useStateSelector } from 'state/typedHooks';
+import styled, { css } from 'styled-components';
+import { motion } from 'framer-motion';
 
 interface ItemDivProps {
   isAlive: boolean;
@@ -11,11 +11,11 @@ interface ItemDivProps {
 }
 
 const ItemDiv = styled.div<ItemDivProps>`
-  border-radius: 20%;
+  border-radius: 10%;
   ${flexCenter()};
 
   background-color: ${({ isAlive }) =>
-    isAlive ? "RGBA(0, 171, 101,0.5)" : "rgba(0, 0, 0, 0)"};
+    isAlive ? 'RGBA(0, 171, 101,0.3)' : 'rgba(0, 0, 0, 0)'};
 
   ${({ blockSize }) => css`
     width: ${blockSize}px;

@@ -1,11 +1,21 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const PanelWraper = styled.div`
+interface PanelWraperProps {
+  side: 'LEFT' | 'RIGHT';
+}
+const PanelWraper = styled.div<PanelWraperProps>`
   padding: 15px;
   width: 300px;
   height: 100%;
   flex-shrink: 0;
-  border: 1px solid gray;
+  ${({ side }) =>
+    side === 'LEFT'
+      ? css`
+          border-right: 1px solid gray;
+        `
+      : css`
+          border-left: 1px solid gray;
+        `}
 `;
 
 export default PanelWraper;

@@ -10,7 +10,7 @@ const CompParams = () => {
     ({ inventory }) => inventory.selectedComponent
   );
 
-  if (!pageId) return null;
+  if (!componentId) return null;
   return (
     <Div>
       <Remove pageId={pageId} componentId={componentId} />

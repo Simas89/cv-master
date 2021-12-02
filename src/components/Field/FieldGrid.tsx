@@ -15,7 +15,7 @@ const StyledSvg = styled.svg`
   line {
     shape-rendering: crispEdges !important;
     stroke-width: 1px !important;
-    stroke: rgba(0, 0, 0, 0.2);
+    stroke: rgba(0, 0, 0, 0.1);
   }
 `;
 

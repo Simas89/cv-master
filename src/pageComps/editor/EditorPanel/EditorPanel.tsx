@@ -18,6 +18,7 @@ const Div = styled.div`
   flex-direction: column;
   align-items: center;
   overflow-y: scroll;
+  background-color: #d6d6d6;
 
   .pages {
     display: flex;

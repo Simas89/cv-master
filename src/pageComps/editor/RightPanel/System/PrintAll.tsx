@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
-import styled from 'styled-components';
 import { Button } from '@mui/material';
 import { store } from 'state';
-import Field from 'pageComps/editor/EditorPanel/Page/Field';
-import { useReactToPrint } from 'react-to-print';
+import Printer, { PrinterRef } from 'components/Printer';
 
 const getPages = () => {
   const pages = store.getState().inventory.pages;
@@ -15,60 +13,32 @@ const getPages = () => {
         order: pages[k].order,
       };
     })
-    .sort((a, b) => a.order - b.order);
+    .sort((a, b) => a.order - b.order)
+    .map((el) => el.pageId);
 };
 
-const Printer = styled.div`
-  position: absolute;
-  transform: translateX(1000px);
-
-  .print-window {
-    display: flex;
-    flex-direction: column;
-  }
-`;
-
-interface Page {
-  pageId: string;
-  order: number;
-}
-
 export const PrintAll = () => {
-  const [printPages, setPrintPages] = useState<Page[]>([]);
-  const ref = useRef<HTMLDivElement>(null);
+  const [printPages, setPrintPages] = useState<string[]>([]);
+  const ref = useRef<PrinterRef>(null);
 
-  const handlePreparePrint = () => {
+  const print = () => {
     const pages = getPages();
     setPrintPages(pages);
-    setTimeout(() => {
-      if (typeof handlePrint !== 'undefined') handlePrint();
-    }, 100);
+    ref.current?.handlePrint();
   };
 
-  const handlePrint = useReactToPrint({
-    content: () => ref.current,
-    // removeAfterPrint: true,
-    onBeforePrint: () => {
-      console.log('before print');
-      setPrintPages([]);
-    },
-    onAfterPrint: () => console.log('after print'),
-  });
   return (
     <>
-      <Button variant='contained' onClick={handlePreparePrint} size='small'>
+      <Button variant='contained' onClick={print} size='small'>
         Print all
       </Button>
 
-      {printPages.length ? (
-        <Printer>
-          <div ref={ref} className='print-window'>
-            {printPages.map((el) => (
-              <Field key={el.pageId} pageId={el.pageId} />
-            ))}
-          </div>
-        </Printer>
-      ) : null}
+      <Printer
+        ref={ref}
+        printPages={printPages}
+        documentTitle='All pages'
+        onAfterPrint={() => setPrintPages([])}
+      />
     </>
   );
 };

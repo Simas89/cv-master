@@ -29,7 +29,7 @@ export const Remove: React.FC<RemoveProps> = ({ pageId, componentId }) => {
   const removeComponent = () => {
     setSpace({ isFree: true, pageId, componentsDimensions });
     deleteComponent({ pageId, componentId });
-    setSelectedComponent({ pageId: '', componentId: '' });
+    setSelectedComponent({ pageId, componentId: '' });
   };
 
   return (

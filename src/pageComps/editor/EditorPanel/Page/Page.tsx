@@ -1,21 +1,20 @@
-import React, { useRef } from "react";
-import styled from "styled-components";
-import { useStateSelector } from "state";
-import useActionsField from "state/actionHooks/useActionsField";
-import { H_BLOCKS } from "state/reducers/field";
-// import useGameOfLife from "hooks/useGameOfLife";
-import { useReactToPrint } from "react-to-print";
-import { IconButton } from "@mui/material";
-import PrintIcon from "@mui/icons-material/Print";
-import ArrowCircleUpRoundedIcon from "@mui/icons-material/ArrowCircleUpRounded";
-import ArrowCircleDownRoundedIcon from "@mui/icons-material/ArrowCircleDownRounded";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import useIsomorphicLayoutEffect from "hooks/useIsomorphicLayoutEffect";
-import Field from "./Field";
-import useActionsInventory from "state/actionHooks/useActionsInventory";
+import React, { useRef } from 'react';
+import styled from 'styled-components';
+import { useStateSelector } from 'state';
+import useActionsField from 'state/actionHooks/useActionsField';
+import { H_BLOCKS } from 'state/reducers/field';
+import { IconButton } from '@mui/material';
+import ArrowCircleUpRoundedIcon from '@mui/icons-material/ArrowCircleUpRounded';
+import ArrowCircleDownRoundedIcon from '@mui/icons-material/ArrowCircleDownRounded';
+import useIsomorphicLayoutEffect from 'hooks/useIsomorphicLayoutEffect';
+import Field from 'components/Field';
+import useActionsInventory from 'state/actionHooks/useActionsInventory';
+import { Paper } from '@mui/material';
 
-const PageWrapper = styled.div`
+const PageWrapper = styled(Paper)`
   position: relative;
+  /* background-color: rgba(0, 0, 0, 0); */
+  padding: 0;
 
   .page-menu {
     width: 100%;
@@ -32,13 +31,6 @@ const PageWrapper = styled.div`
         transform: scale(1);
       }
     }
-    .delete-btn {
-      margin-left: auto;
-      color: black;
-      &:hover {
-        color: red;
-      }
-    }
   }
 `;
 
@@ -49,17 +41,21 @@ interface FieldProps {
 }
 
 const Page: React.FC<FieldProps> = ({ pageId, pageOrder, totalPages }) => {
-  const fieldDimensions = useStateSelector(
-    ({ field }) => field.fieldDimensions
+  const { fieldDimensions, selectedPageId } = useStateSelector(
+    ({ field, inventory }) => {
+      return {
+        fieldDimensions: field.fieldDimensions,
+        selectedPageId: inventory.selectedComponent.pageId,
+      };
+    }
   );
   const isOn = useStateSelector(({ field }) => field.modifyMode.isOn);
 
   const fieldRef = useRef<HTMLDivElement>(null);
 
-  const { setBlockSize, deletePage, resetSlotCheck, setModifyMode } =
-    useActionsField();
+  const { setBlockSize, resetSlotCheck, setModifyMode } = useActionsField();
 
-  const { deleteComponentsPage, swapPage } = useActionsInventory();
+  const { swapPage, setSelectedPage } = useActionsInventory();
 
   useIsomorphicLayoutEffect(() => {
     let newBlockSize = 0;
@@ -70,14 +66,10 @@ const Page: React.FC<FieldProps> = ({ pageId, pageOrder, totalPages }) => {
     setBlockSize(newBlockSize);
   }, [fieldDimensions, setBlockSize]);
 
-  const handlePrint = useReactToPrint({
-    content: () => fieldRef.current,
-  });
-
   const handleMouseLeave = () => {
     if (isOn) {
       resetSlotCheck(pageId);
-      setModifyMode({ isPassing: false, pageId: "" });
+      setModifyMode({ isPassing: false, pageId: '' });
     }
   };
 
@@ -87,53 +79,38 @@ const Page: React.FC<FieldProps> = ({ pageId, pageOrder, totalPages }) => {
     }
   };
 
-  const removePage = () => {
-    deleteComponentsPage(pageId);
-    deletePage(pageId);
+  const selectPage = () => {
+    setSelectedPage(pageId);
   };
 
   return (
     <PageWrapper
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
+      onClick={selectPage}
+      elevation={selectedPageId === pageId ? 20 : 5}
     >
-      <div className="page-menu">
-        <IconButton
-          size="small"
-          onClick={handlePrint}
-          className="floating-btn"
-          color="secondary"
-        >
-          <PrintIcon />
-        </IconButton>
+      <div className='page-menu'>
         {pageOrder > 1 && (
           <IconButton
-            size="small"
-            onClick={() => swapPage({ id: pageId, direction: "UP" })}
-            className="floating-btn"
-            color="secondary"
+            size='small'
+            onClick={() => swapPage({ id: pageId, direction: 'UP' })}
+            className='floating-btn'
+            color='secondary'
           >
             <ArrowCircleUpRoundedIcon />
           </IconButton>
         )}
         {pageOrder < totalPages && (
           <IconButton
-            size="small"
-            onClick={() => swapPage({ id: pageId, direction: "DOWN" })}
-            className="floating-btn"
-            color="secondary"
+            size='small'
+            onClick={() => swapPage({ id: pageId, direction: 'DOWN' })}
+            className='floating-btn'
+            color='secondary'
           >
             <ArrowCircleDownRoundedIcon />
           </IconButton>
         )}
-        <IconButton
-          size="small"
-          onClick={removePage}
-          className="floating-btn delete-btn"
-          color="secondary"
-        >
-          <HighlightOffIcon />
-        </IconButton>
       </div>
       <Field pageId={pageId} reference={fieldRef} />
     </PageWrapper>

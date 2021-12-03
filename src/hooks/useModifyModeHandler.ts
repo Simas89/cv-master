@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { modifyModeHandlerSelector, useStateSelector } from 'state';
 import useActionsField from 'state/actionHooks/useActionsField';
 import isEqual from 'lodash.isequal';
 import useActionsInventory from 'state/actionHooks/useActionsInventory';
 import { ComponentType } from 'types';
-import useCreateFreeSpace from './useCreateFreeSpace';
 
 const useModifyModeHandler = () => {
   const { modifyMode, pageNames } = useStateSelector(
@@ -14,6 +13,7 @@ const useModifyModeHandler = () => {
   const {
     isOn,
     pageId,
+    isAbsolute,
     isPassing,
     componentId,
     componentType,
@@ -30,29 +30,22 @@ const useModifyModeHandler = () => {
   const { setModifyMode, resetSlotCheck } = useActionsField();
   const { setComponent, deleteComponent } = useActionsInventory();
 
-  const setSpace = useCreateFreeSpace();
-
   const createComponent = () => {
     const component = {
       componentType,
-      isAbsolute: false,
+      isAbsolute,
       width,
       height,
       hLocation,
       vLocation,
     };
 
-    const componentsDimensions = [{ height, width, hLocation, vLocation }];
-
     if (pageId) {
       setComponent({ pageId, componentId, component });
-    } else {
-      setSpace({ isFree: false, pageId, componentsDimensions });
     }
 
-    // component moved outside the page and needs to be creared from the current
+    // component moved outside the page and is over another page
     if (memoPageId && memoPageId !== pageId) {
-      setSpace({ isFree: true, pageId: memoPageId, componentsDimensions });
       deleteComponent({ pageId: memoPageId, componentId });
     }
   };
@@ -64,10 +57,8 @@ const useModifyModeHandler = () => {
       hLocation: memoHLocation,
       vLocation: memoVLocation,
     };
-    const componentsDimensions = [dimensions];
 
     setComponent({ pageId, componentId, component: { ...dimensions } });
-    setSpace({ isFree: false, pageId, componentsDimensions });
   };
 
   useEffect(() => {
@@ -106,6 +97,7 @@ const useModifyModeHandler = () => {
   }, [
     setModifyMode,
     isOn,
+    isAbsolute,
     isPassing,
     createComponent,
     resetComponent,

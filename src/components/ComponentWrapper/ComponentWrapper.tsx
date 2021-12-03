@@ -1,11 +1,10 @@
-import { MiniMenu } from './';
 import React from 'react';
+import { MiniMenu } from './';
 import { useStateSelector } from 'state';
 import useActionsField from 'state/actionHooks/useActionsField';
 import useActionsInventory from 'state/actionHooks/useActionsInventory';
 import styled, { css } from 'styled-components';
 import isEqual from 'lodash.isequal';
-import useIsomorphicLayoutEffect from 'hooks/useIsomorphicLayoutEffect';
 import useCreateFreeSpace from 'hooks/useCreateFreeSpace';
 
 interface ComponentWrapperPosition {
@@ -16,12 +15,13 @@ interface ComponentWrapperPosition {
   blockSize: number;
   isModifyModeOn: boolean;
   isBeingDragged: boolean;
+  isAbsolute: boolean;
   isSelected: boolean;
 }
 
 const Div = styled.div<ComponentWrapperPosition>`
   position: absolute;
-  background-color: lightgray;
+  background-color: ${({ isAbsolute }) => (isAbsolute ? '#D9DDDC' : '#999DA0')};
 
   ${({
     blockSize,
@@ -72,6 +72,7 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
       selectedComponent: inventory.selectedComponent,
       component: {
         componentType: comp.componentType,
+        isAbsolute: comp.isAbsolute,
         height: comp.height,
         width: comp.width,
         hLocation: comp.hLocation,
@@ -88,15 +89,12 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
     };
   }, isEqual);
 
-  const { height, width, hLocation, vLocation, componentType } = component;
+  const { height, width, hLocation, vLocation, componentType, isAbsolute } =
+    component;
 
   const { setSelectedComponent } = useActionsInventory();
   const { setModifyMode } = useActionsField();
   const setSpace = useCreateFreeSpace();
-
-  useIsomorphicLayoutEffect(() => {
-    setSpace({ isFree: false, pageId, componentsDimensions });
-  }, [height, width, hLocation, vLocation]);
 
   const onDragPulled = () => {
     setSpace({ isFree: true, pageId, componentsDimensions });
@@ -104,6 +102,7 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
     setModifyMode({
       isOn: true,
       memoize: true,
+      isAbsolute,
       componentId,
       pageId,
       componentType,
@@ -138,6 +137,7 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
       isModifyModeOn={isModifyModeOn}
       isBeingDragged={isBeingDragged}
       isSelected={checkIfSelected()}
+      isAbsolute={isAbsolute}
       onClick={selectComponent}
     >
       {checkIfSelected() && (

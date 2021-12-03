@@ -1,4 +1,7 @@
+import { Checkbox, FormControlLabel } from '@mui/material';
 import React from 'react';
+import { useStateSelector } from 'state';
+import useActionsInventory from 'state/actionHooks/useActionsInventory';
 import { ComponentType } from 'types';
 import { keyGen } from 'util/generateId';
 import { ItemWrapper } from '.';
@@ -10,8 +13,26 @@ const items = [
 ];
 
 const Library = () => {
+  const isCreateAbsolute = useStateSelector(
+    ({ inventory }) => inventory.isCreateAbsolute
+  );
+
+  const { setIsCreateAbsolute } = useActionsInventory();
+
+  const toggleCreateAbsolute = () => {
+    setIsCreateAbsolute(!isCreateAbsolute);
+  };
   return (
     <>
+      <FormControlLabel
+        control={
+          <Checkbox
+            onChange={toggleCreateAbsolute}
+            checked={isCreateAbsolute}
+          />
+        }
+        label='Create absolute'
+      />
       {items.map((el) => (
         <ItemWrapper key={keyGen()} item={el}>
           <span>

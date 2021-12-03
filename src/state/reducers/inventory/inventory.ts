@@ -43,6 +43,7 @@ interface InventoryState {
     pageId: string;
     componentId: string;
   };
+  isCreateAbsolute: boolean;
 }
 
 const initialState: InventoryState = {
@@ -51,6 +52,7 @@ const initialState: InventoryState = {
     pageId: '',
     componentId: '',
   },
+  isCreateAbsolute: true,
 };
 
 interface LoadNewComponentsPageProps {
@@ -62,6 +64,7 @@ export const slice = createSlice({
   name: 'inventory',
   initialState,
   reducers: {
+    // PAGE
     loadNewComponentsPage: (
       state,
       action: PayloadAction<LoadNewComponentsPageProps>
@@ -120,6 +123,7 @@ export const slice = createSlice({
       }
     },
 
+    // COMPONENT
     setComponent: (state, action: PayloadAction<SetComponentProps>) => {
       const pageId = action.payload.pageId;
       const component = action.payload.component;
@@ -152,12 +156,14 @@ export const slice = createSlice({
       delete state.pages[pageId].components[componentId];
     },
 
+    // SELECTED
     setSelectedComponent: (
       state,
       action: PayloadAction<{ pageId: string; componentId: string }>
     ) => {
       state.selectedComponent = action.payload;
     },
+
     setSelectedPage: (state, action: PayloadAction<string>) => {
       const pageId = action.payload;
       const currenPageId = current(state.selectedComponent).pageId;
@@ -166,6 +172,11 @@ export const slice = createSlice({
         state.selectedComponent.componentId = '';
       }
       state.selectedComponent.pageId = pageId;
+    },
+
+    // OTHER
+    setIsCreateAbsolute: (state, action: PayloadAction<boolean>) => {
+      state.isCreateAbsolute = action.payload;
     },
   },
 });

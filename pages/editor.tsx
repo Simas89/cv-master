@@ -22,17 +22,19 @@ const pagesData = [
     pageId: 'PAGE_1_jy12cd598f8',
     order: 1,
     components: {
-      randomIdOne: {
-        componentType: ComponentType.ITEM_A,
-        timeStamp: 123,
-        width: 5,
-        height: 2,
-        hLocation: 3,
-        vLocation: 3,
-      },
+      // randomIdOne: {
+      //   componentType: ComponentType.ITEM_A,
+      //   timeStamp: 123,
+      //   isAbsolute: true,
+      //   width: 5,
+      //   height: 2,
+      //   hLocation: 3,
+      //   vLocation: 3,
+      // },
       randomIdTwo: {
         componentType: ComponentType.ITEM_B,
         timeStamp: 456,
+        isAbsolute: false,
         width: 7,
         height: 3,
         hLocation: 4,

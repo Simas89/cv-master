@@ -1,10 +1,11 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import useDragItem from 'hooks/useDragItem';
 import { Paper } from '@mui/material';
 import { flexCenter } from 'common/css';
 import { motion } from 'framer-motion';
 import useActionsField from 'state/actionHooks/useActionsField';
 import { ComponentType } from 'types';
+import { useStateSelector } from 'state';
 
 const Div = styled(Paper).attrs({ elevation: 6 })`
   position: relative;
@@ -27,10 +28,13 @@ export const ItemWrapper: React.FC<ItemWrapperProps> = ({
   children,
   ...rest
 }) => {
+  const isCreateAbsolute = useStateSelector(
+    ({ inventory }) => inventory.isCreateAbsolute
+  );
   const { setModifyMode } = useActionsField();
 
   const onDragPulled = () => {
-    setModifyMode({ isOn: true, ...item });
+    setModifyMode({ isOn: true, isAbsolute: isCreateAbsolute, ...item });
   };
 
   const { initMouse, isDrag } = useDragItem(40, onDragPulled);

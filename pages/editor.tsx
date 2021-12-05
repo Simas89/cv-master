@@ -25,18 +25,22 @@ const pagesData = [
       randomIdOne: {
         componentType: ComponentType.ITEM_A,
         timeStamp: 123,
+        isAbsolute: true,
         width: 5,
         height: 2,
         hLocation: 3,
         vLocation: 3,
+        zIndex: 10,
       },
       randomIdTwo: {
         componentType: ComponentType.ITEM_B,
         timeStamp: 456,
+        isAbsolute: false,
         width: 7,
         height: 3,
         hLocation: 4,
         vLocation: 7,
+        zIndex: 10,
       },
     },
   },
@@ -58,7 +62,7 @@ const Editor: NextPage = () => {
       pageId: pagesDataSorted[0].pageId,
       componentId: '',
     });
-  }, [addNewFieldPage, loadNewComponentsPage]);
+  }, [addNewFieldPage, loadNewComponentsPage, setSelectedComponent]);
 
   return (
     <Div>

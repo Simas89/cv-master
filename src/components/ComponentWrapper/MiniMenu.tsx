@@ -7,6 +7,7 @@ import { flexCenter } from 'common/css';
 const Div = styled.div`
   width: 60px;
   height: 60px;
+  position: absolute;
   ${flexCenter()};
 
   /* border: 1px solid black; */

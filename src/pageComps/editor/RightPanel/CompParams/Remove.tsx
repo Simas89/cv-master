@@ -13,12 +13,17 @@ interface RemoveProps {
 export const Remove: React.FC<RemoveProps> = ({ pageId, componentId }) => {
   const componentsDimensions = useStateSelector(({ inventory }) => {
     const comp = inventory.pages[pageId].components[componentId];
+    const height = comp.height;
+    const width = comp.width;
+    const hLocation = comp.hLocation;
+    const vLocation = comp.vLocation;
+
     return [
       {
-        height: comp.height,
-        width: comp.width,
-        hLocation: comp.hLocation,
-        vLocation: comp.vLocation,
+        height,
+        width,
+        hLocation,
+        vLocation,
       },
     ];
   }, isEqual);

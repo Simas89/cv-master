@@ -17,11 +17,8 @@ export const MovePage: React.FC<{ pageId: string }> = ({ pageId }) => {
     };
   });
 
-  console.log(totalPages);
-
   const { swapPage } = useActionsInventory();
 
-  console.log(pageOrder);
   return (
     <Div>
       Move

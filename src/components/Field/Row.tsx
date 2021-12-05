@@ -26,3 +26,5 @@ export const Row = React.memo<RowProps>(({ vBlock, pageId }) => {
     </RowDiv>
   );
 });
+
+Row.displayName = 'Row';

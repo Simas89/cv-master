@@ -1,10 +1,10 @@
-import React from "react";
-import styled, { css } from "styled-components";
-import { motion } from "framer-motion";
-import useMousePosition from "hooks/useMousePosition";
-import { placeholderSelector, useStateSelector } from "state";
-import useModifyModeHandler from "hooks/useModifyModeHandler";
-import isEqual from "lodash.isequal";
+import React from 'react';
+import styled, { css } from 'styled-components';
+import { motion } from 'framer-motion';
+import useMousePosition from 'hooks/useMousePosition';
+import { placeholderSelector, useStateSelector } from 'state';
+import useModifyModeHandler from 'hooks/useModifyModeHandler';
+import isEqual from 'lodash.isequal';
 
 interface DivProps {
   blockSize: number;
@@ -15,7 +15,6 @@ interface DivProps {
 
 const Div = styled.div<DivProps>`
   pointer-events: none;
-  /* border: 1px solid red; */
   position: absolute;
   z-index: 10;
 
@@ -55,13 +54,13 @@ const Placeholder = () => {
     <MotionDiv
       initial={{ x, y }}
       animate={{ x, y }}
-      transition={{ type: "spring", mass: 0.01, stiffness: 100, damping: 3 }}
+      transition={{ type: 'spring', mass: 0.01, stiffness: 100, damping: 3 }}
       blockSize={blockSize}
       width={blockSize * hBlocks}
       height={blockSize * vBlocks}
       zoom={zoom}
     >
-      <div className="item"></div>
+      <div className='item'></div>
     </MotionDiv>
   );
 };

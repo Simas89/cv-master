@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useStateSelector } from 'state';
-import { Remove, IsAbsolute } from '.';
+import { Remove, IsAbsolute, ZIndex } from '.';
 
 const Div = styled.div``;
 
@@ -13,8 +13,9 @@ const CompParams = () => {
   if (!componentId) return null;
   return (
     <Div>
-      <Remove pageId={pageId} componentId={componentId} />
       <IsAbsolute pageId={pageId} componentId={componentId} />
+      <ZIndex pageId={pageId} componentId={componentId} />
+      <Remove pageId={pageId} componentId={componentId} />
     </Div>
   );
 };

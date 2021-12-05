@@ -21,7 +21,7 @@ const FieldDiv = styled.div`
     /* transform: perspective(400px) rotateY(5deg) rotateX(5deg) rotateZ(-5deg)
       scale(1.5); */
   }
-  .white-gradient {
+  /* .white-gradient {
     top: 0;
     left: 0;
     height: 100%;
@@ -37,7 +37,7 @@ const FieldDiv = styled.div`
       rgba(171, 240, 254, 0.03125) 76%,
       rgba(0, 212, 255, 0) 100%
     );
-  }
+  } */
 `;
 
 const getNumber = (input: any) => {
@@ -47,14 +47,14 @@ const getNumber = (input: any) => {
 
 const densitySelector = (input: number | undefined) => {
   const x = getNumber(input);
-  if (x < 600) return 15;
-  else if (x < 1000) return 20;
-  else if (x < 1700) return 30;
-  else return 40;
+  if (x < 600) return 30;
+  else if (x < 1000) return 40;
+  else if (x < 1700) return 50;
+  else return 60;
 };
 
 const GameWindow = () => {
-  const [drawHBlocks, setDrawHBlocks] = useState(65);
+  const [drawHBlocks, setDrawHBlocks] = useState(60);
   const hBlocks = useStateSelector(({ gameOfLife }) => gameOfLife.value.length);
   const vBlocks = useStateSelector(
     ({ gameOfLife }) => gameOfLife.value[0].length

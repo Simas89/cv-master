@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { current } from "immer";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { current } from 'immer';
 
 interface FieldState {
   blockSize: number;
@@ -22,8 +22,10 @@ const initialState: FieldState = {
   value: [[{ isAlive: false, isNew: false }]],
 };
 
+const randomBool = () => !Math.round(Math.random());
+
 export const slice = createSlice({
-  name: "gameOfLife",
+  name: 'gameOfLife',
   initialState,
   reducers: {
     setBlockSize: (state, action: PayloadAction<number>) => {
@@ -35,7 +37,7 @@ export const slice = createSlice({
       const hLenght = current(state).value.length;
 
       for (let i = hLenght; i < numOfBlocks; i++) {
-        state.value.push([{ isAlive: false, isNew: false }]);
+        state.value.push([{ isAlive: randomBool(), isNew: false }]);
       }
 
       for (let i = hLenght; i > numOfBlocks; i--) {
@@ -51,7 +53,7 @@ export const slice = createSlice({
         const vLenght = current(state).value[i].length;
 
         for (let j = vLenght; j < numOfBlocks; j++) {
-          state.value[i].push({ isAlive: false, isNew: false });
+          state.value[i].push({ isAlive: randomBool(), isNew: false });
         }
 
         for (let j = vLenght; j > numOfBlocks; j--) {

@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { modifyModeHandlerSelector, useStateSelector } from 'state';
 import useActionsField from 'state/actionHooks/useActionsField';
 import isEqual from 'lodash.isequal';
 import useActionsInventory from 'state/actionHooks/useActionsInventory';
-import { ComponentType } from 'types';
-import useCreateFreeSpace from './useCreateFreeSpace';
+import useRecalculateSpace from './useRecalculateSpace';
 
 const useModifyModeHandler = () => {
   const { modifyMode, pageNames } = useStateSelector(
@@ -14,6 +13,7 @@ const useModifyModeHandler = () => {
   const {
     isOn,
     pageId,
+    isAbsolute,
     isPassing,
     componentId,
     componentType,
@@ -28,28 +28,38 @@ const useModifyModeHandler = () => {
   } = modifyMode;
 
   const { setModifyMode, resetSlotCheck } = useActionsField();
-  const { addComponent, deleteComponent } = useActionsInventory();
+  const { addComponent, setComponent, deleteComponent } = useActionsInventory();
+  const recalculateSpace = useRecalculateSpace();
 
-  const setSpace = useCreateFreeSpace();
-
-  const createComponent = () => {
+  const createNewComponent = () => {
     const component = {
       componentType,
-      timeStamp: null,
+      isAbsolute,
       width,
       height,
       hLocation,
       vLocation,
+      timeStamp: new Date().getTime(),
+      zIndex: 10,
     };
-    const componentsDimensions = [{ height, width, hLocation, vLocation }];
 
-    if (pageId) addComponent({ pageId, componentId, component });
-    else {
-      setSpace({ isFree: false, pageId, componentsDimensions });
+    if (pageId) {
+      addComponent({ pageId, component });
+    }
+  };
+
+  const setOldComponent = () => {
+    const component = {
+      hLocation,
+      vLocation,
+    };
+
+    if (pageId) {
+      setComponent({ pageId, memoPageId, componentId, component });
     }
 
+    // component moved outside the page and is over another page
     if (memoPageId && memoPageId !== pageId) {
-      setSpace({ isFree: true, pageId: memoPageId, componentsDimensions });
       deleteComponent({ pageId: memoPageId, componentId });
     }
   };
@@ -61,41 +71,40 @@ const useModifyModeHandler = () => {
       hLocation: memoHLocation,
       vLocation: memoVLocation,
     };
-    const componentsDimensions = [dimensions];
-    const component = {
-      componentType,
-      ...dimensions,
-    };
-    addComponent({ pageId, componentId, component });
-    setSpace({ isFree: false, pageId, componentsDimensions });
+
+    setComponent({ pageId, componentId, component: { ...dimensions } });
+    recalculateSpace(pageId);
   };
 
   useEffect(() => {
     const onMouseUp = () => {
-      if (isOn) {
-        if (isPassing) {
-          createComponent();
-        }
-        if (!isPassing && memoize) {
-          console.log('Reset comp');
-          resetComponent(pageId || memoPageId);
-        }
-        setModifyMode({
-          isOn: false,
-          pageId: '',
-          componentId: '',
-          componentType: ComponentType.NULL,
-          isPassing: false,
-          memoize: false,
-          memoPageId: '',
-          width: 0,
-          height: 0,
-          hLocation: 0,
-          vLocation: 0,
-        });
+      if (!isOn) return;
 
-        pageNames.forEach((el) => resetSlotCheck(el));
+      if (isPassing) {
+        if (componentId) {
+          setOldComponent();
+        } else {
+          createNewComponent();
+        }
       }
+      if (!isPassing && memoize) {
+        console.log('Reset comp');
+        resetComponent(pageId || memoPageId);
+      }
+      setModifyMode({
+        isOn: false,
+        // isPassing: false,
+        pageId: '',
+        componentId: '',
+        // memoize: false,
+        // memoPageId: '',
+        // width: 0,
+        // height: 0,
+        // hLocation: 0,
+        // vLocation: 0,
+      });
+
+      pageNames.forEach((el) => resetSlotCheck(el));
     };
 
     window.addEventListener('mouseup', onMouseUp);
@@ -103,7 +112,17 @@ const useModifyModeHandler = () => {
     return () => {
       window.removeEventListener('mouseup', onMouseUp);
     };
-  }, [setModifyMode, isOn, isPassing, createComponent, resetComponent]);
+  }, [
+    setModifyMode,
+    isOn,
+    isAbsolute,
+    isPassing,
+    setOldComponent,
+    createNewComponent,
+    resetComponent,
+    pageId,
+    componentId,
+  ]);
 };
 
 export default useModifyModeHandler;

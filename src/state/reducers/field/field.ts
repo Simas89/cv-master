@@ -10,6 +10,7 @@ interface Block {
 
 interface SetModifyModeProps {
   isOn?: boolean;
+  isAbsolute?: boolean;
   pageId?: string;
   componentId?: string;
   componentType?: ComponentType;
@@ -53,6 +54,7 @@ interface FieldState {
   blockSize: number;
   modifyMode: {
     isOn: boolean;
+    isAbsolute: boolean;
     pageId: string;
     componentId: string;
     componentType: ComponentType;
@@ -72,6 +74,7 @@ interface FieldState {
 
 export const H_BLOCKS = 16;
 export const V_BLOCKS = 23;
+export const BLOCK_SIZE = 62;
 
 const emptyBlock: Block = {
   isFree: true,
@@ -97,9 +100,10 @@ const initialState: FieldState = {
     width: fieldDimensionsWidth.LARGE,
     height: fieldDimensionsHeight.LARGE,
   },
-  blockSize: 40,
+  blockSize: 62,
   modifyMode: {
     isOn: false,
+    isAbsolute: true,
     pageId: '',
     componentId: '',
     componentType: ComponentType.NULL,
@@ -175,6 +179,7 @@ export const slice = createSlice({
       const { pageId, hBlock, vBlock } = action.payload;
       const placeholderWidth = state.modifyMode.width;
       const placeholderHeight = state.modifyMode.height;
+      const isAbsolute = state.modifyMode.isAbsolute;
       const currentField = state.pages[pageId].field;
 
       let checkTestPassing = true;
@@ -195,10 +200,11 @@ export const slice = createSlice({
           // Reset previous
           currentField[i][j].isInModifyMode = false;
 
-          // Test if all blocks free
+          // mark blocks that are being checked
           if (conditionHor && conditionVer) {
             currentField[i][j].isInModifyMode = true;
-            if (!currentField[i][j].isFree) {
+            // Test if all blocks free and is not in absolute mode
+            if (!currentField[i][j].isFree && !isAbsolute) {
               checkTestPassing = false;
             }
           }
@@ -217,8 +223,6 @@ export const slice = createSlice({
       const componentsDimensions = action.payload.componentsDimensions;
       const pageId = action.payload.pageId;
       const isFree = action.payload.isFree;
-
-      console.log('!!!', pageId);
 
       componentsDimensions.forEach((el) => {
         const height = el.height;

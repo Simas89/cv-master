@@ -12,42 +12,44 @@ const Div = styled.div`
   position: relative;
   height: 100vh;
   width: 100%;
-  max-width: 100vw;
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
   overflow: hidden;
 `;
 
 const pagesData = [
   {
-    pageId: 'kwcetwjy12cd598f8',
+    pageId: 'PAGE_1_jy12cd598f8',
     order: 1,
     components: {
       randomIdOne: {
         componentType: ComponentType.ITEM_A,
         timeStamp: 123,
+        isAbsolute: true,
         width: 5,
         height: 2,
         hLocation: 3,
         vLocation: 3,
+        zIndex: 10,
       },
       randomIdTwo: {
         componentType: ComponentType.ITEM_B,
         timeStamp: 456,
+        isAbsolute: false,
         width: 7,
         height: 3,
         hLocation: 4,
         vLocation: 7,
+        zIndex: 10,
       },
     },
   },
-  { pageId: 'kwcetwk8773371db2', order: 2 },
+  { pageId: 'PAGE_2_k8773371db2', order: 2 },
 ];
 
 const Editor: NextPage = () => {
   const { addNewFieldPage } = useActionsField();
-  const { loadNewComponentsPage } = useActionsInventory();
+  const { loadNewComponentsPage, setSelectedComponent } = useActionsInventory();
 
   useEffect(() => {
     const pagesDataSorted = pagesData.sort((a, b) => a.order - b.order);
@@ -55,7 +57,12 @@ const Editor: NextPage = () => {
       loadNewComponentsPage({ pageId: el.pageId, components: el.components });
       addNewFieldPage(el.pageId);
     });
-  }, [addNewFieldPage, loadNewComponentsPage]);
+
+    setSelectedComponent({
+      pageId: pagesDataSorted[0].pageId,
+      componentId: '',
+    });
+  }, [addNewFieldPage, loadNewComponentsPage, setSelectedComponent]);
 
   return (
     <Div>

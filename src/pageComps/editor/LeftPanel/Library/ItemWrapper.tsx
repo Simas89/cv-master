@@ -20,7 +20,10 @@ const MotionDiv = motion(Div);
 
 interface ItemWrapperProps {
   children: React.ReactNode;
-  item: { width: number; height: number; componentType: ComponentType };
+  item: {
+    componentType: ComponentType;
+    dimensions: { width: number; height: number };
+  };
 }
 
 export const ItemWrapper: React.FC<ItemWrapperProps> = ({
@@ -34,7 +37,12 @@ export const ItemWrapper: React.FC<ItemWrapperProps> = ({
   const { setModifyMode } = useActionsField();
 
   const onDragPulled = () => {
-    setModifyMode({ isOn: true, isAbsolute: isCreateAbsolute, ...item });
+    setModifyMode({
+      isOn: true,
+      isAbsolute: isCreateAbsolute,
+      componentType: item.componentType,
+      ...item.dimensions,
+    });
   };
 
   const { initMouse, isDrag } = useDragItem(40, onDragPulled);

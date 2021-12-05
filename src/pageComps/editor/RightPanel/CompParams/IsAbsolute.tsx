@@ -4,6 +4,7 @@ import React from 'react';
 import { useStateSelector } from 'state';
 import useActionsInventory from 'state/actionHooks/useActionsInventory';
 import isEqual from 'lodash.isequal';
+import { H_BLOCKS, V_BLOCKS } from 'state/reducers/field';
 
 interface IsAbsoluteProps {
   pageId: string;
@@ -14,17 +15,33 @@ export const IsAbsolute: React.FC<IsAbsoluteProps> = ({
   pageId,
   componentId,
 }) => {
-  const { isAbsolute, componentsDimensions } = useStateSelector(
-    ({ inventory }) => {
-      const height = inventory.pages[pageId].components[componentId].height;
-      const width = inventory.pages[pageId].components[componentId].width;
-      const hLocation =
-        inventory.pages[pageId].components[componentId].hLocation;
-      const vLocation =
-        inventory.pages[pageId].components[componentId].vLocation;
+  const { isAbsolute, isOn, isAreaFree, componentsDimensions } =
+    useStateSelector(({ inventory, field }) => {
+      const comp = inventory.pages[pageId].components[componentId];
+      const height = comp.height;
+      const width = comp.width;
+      const hLocation = comp.hLocation;
+      const vLocation = comp.vLocation;
+
+      const isAbsolute =
+        inventory.pages[pageId].components[componentId].isAbsolute;
+      const isOn = field.modifyMode.isOn;
+
+      let isAreaFree: boolean = true;
+
+      for (let i = 0; i < H_BLOCKS; i++) {
+        for (let j = 0; j < V_BLOCKS; j++) {
+          const conditionHor = i - hLocation < width && i >= hLocation;
+          const conditionVer = j - vLocation < height && j >= vLocation;
+          const isFree = field.pages[pageId].field[i][j].isFree;
+
+          if (conditionHor && conditionVer && !isFree) {
+            isAreaFree = false;
+          }
+        }
+      }
 
       return {
-        isAbsolute: inventory.pages[pageId].components[componentId].isAbsolute,
         componentsDimensions: [
           {
             height,
@@ -33,10 +50,11 @@ export const IsAbsolute: React.FC<IsAbsoluteProps> = ({
             vLocation,
           },
         ],
+        isAbsolute,
+        isOn,
+        isAreaFree,
       };
-    },
-    isEqual
-  );
+    }, isEqual);
 
   const setSpace = useCreateFreeSpace();
 
@@ -57,7 +75,13 @@ export const IsAbsolute: React.FC<IsAbsoluteProps> = ({
   return (
     <div>
       <FormControlLabel
-        control={<Checkbox onChange={toggleIsAbsolute} checked={isAbsolute} />}
+        control={
+          <Checkbox
+            onChange={toggleIsAbsolute}
+            checked={isAbsolute}
+            disabled={!isAreaFree && isAbsolute && !isOn}
+          />
+        }
         label='Absolute'
       />
     </div>

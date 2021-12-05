@@ -22,15 +22,16 @@ const pagesData = [
     pageId: 'PAGE_1_jy12cd598f8',
     order: 1,
     components: {
-      // randomIdOne: {
-      //   componentType: ComponentType.ITEM_A,
-      //   timeStamp: 123,
-      //   isAbsolute: true,
-      //   width: 5,
-      //   height: 2,
-      //   hLocation: 3,
-      //   vLocation: 3,
-      // },
+      randomIdOne: {
+        componentType: ComponentType.ITEM_A,
+        timeStamp: 123,
+        isAbsolute: true,
+        width: 5,
+        height: 2,
+        hLocation: 3,
+        vLocation: 3,
+        zIndex: 10,
+      },
       randomIdTwo: {
         componentType: ComponentType.ITEM_B,
         timeStamp: 456,
@@ -39,6 +40,7 @@ const pagesData = [
         height: 3,
         hLocation: 4,
         vLocation: 7,
+        zIndex: 10,
       },
     },
   },
@@ -60,7 +62,7 @@ const Editor: NextPage = () => {
       pageId: pagesDataSorted[0].pageId,
       componentId: '',
     });
-  }, [addNewFieldPage, loadNewComponentsPage]);
+  }, [addNewFieldPage, loadNewComponentsPage, setSelectedComponent]);
 
   return (
     <Div>

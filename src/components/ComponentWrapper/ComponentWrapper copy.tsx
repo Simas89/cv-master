@@ -6,19 +6,17 @@ import useActionsInventory from 'state/actionHooks/useActionsInventory';
 import styled, { css } from 'styled-components';
 import isEqual from 'lodash.isequal';
 import useCreateFreeSpace from 'hooks/useCreateFreeSpace';
-import { flexCenter } from 'common/css';
 
-interface WrapperPosition {
+interface ComponentWrapperPosition {
   height: number;
   width: number;
   hLocation: number;
   vLocation: number;
   blockSize: number;
-  isBeingDragged: boolean;
-}
-interface ComponentWrapperPosition extends WrapperPosition {
   isModifyModeOn: boolean;
+  isBeingDragged: boolean;
   isAbsolute: boolean;
+  isSelected: boolean;
   zIndex: number;
 }
 
@@ -33,16 +31,15 @@ const Div = styled.div<ComponentWrapperPosition>`
     vLocation,
     isModifyModeOn,
     isBeingDragged,
-    zIndex,
+    isSelected,
   }) => css`
     width: ${blockSize * width}px;
     height: ${blockSize * height}px;
     left: ${blockSize * hLocation}px;
     top: ${blockSize * vLocation}px;
-
+    z-index: ${isModifyModeOn ? -1 : 1};
     opacity: ${isBeingDragged ? 0.5 : 1};
-    z-index: ${isModifyModeOn ? zIndex - 100 : zIndex + 1};
-    pointer-events: ${isModifyModeOn && 'none'};
+    border: ${isSelected ? '1px solid green' : 'none'};
   `};
 
   .background {
@@ -53,32 +50,9 @@ const Div = styled.div<ComponentWrapperPosition>`
     background-color: ${({ isAbsolute }) =>
       isAbsolute ? '#D9DDDC' : '#999DA0'};
   }
-  .body {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    position: absolute;
-    ${flexCenter()}
-  }
-`;
+  z-index: ${({ zIndex }) => zIndex};
 
-const Menu = styled.div<WrapperPosition>`
-  position: absolute;
-  z-index: 1000;
-
-  ${({ blockSize, width, height, hLocation, vLocation, isBeingDragged }) => css`
-    left: ${blockSize * hLocation}px;
-    top: ${blockSize * vLocation}px;
-    opacity: ${isBeingDragged ? 0.5 : 1};
-
-    .select-indicator {
-      position: absolute;
-      border: 1px solid green;
-      pointer-events: none;
-      width: ${blockSize * width}px;
-      height: ${blockSize * height}px;
-    }
-  `};
+  /* transition: 0.2s; */
 `;
 
 interface ComponentWrapperProps {
@@ -128,6 +102,8 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
 
   const { height, width, hLocation, vLocation, isAbsolute, zIndex } = component;
 
+  console.log(zIndex);
+
   const { setSelectedComponent } = useActionsInventory();
   const { setModifyMode } = useActionsField();
   const setSpace = useCreateFreeSpace();
@@ -162,36 +138,24 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
   };
 
   return (
-    <>
+    <Div
+      blockSize={blockSize}
+      height={height}
+      width={width}
+      hLocation={hLocation}
+      vLocation={vLocation}
+      isModifyModeOn={isModifyModeOn}
+      isBeingDragged={isBeingDragged}
+      isSelected={checkIfSelected()}
+      isAbsolute={isAbsolute}
+      zIndex={zIndex}
+      onClick={selectComponent}
+    >
+      <div className='background'></div>
       {checkIfSelected() && (
-        <Menu
-          blockSize={blockSize}
-          height={height}
-          width={width}
-          hLocation={hLocation}
-          vLocation={vLocation}
-          isBeingDragged={isBeingDragged}
-        >
-          <MiniMenu onDragPulled={onDragPulled} isShifted={vLocation === 0} />
-          <div className='select-indicator' />
-        </Menu>
+        <MiniMenu onDragPulled={onDragPulled} isShifted={vLocation === 0} />
       )}
-      <Div
-        blockSize={blockSize}
-        height={height}
-        width={width}
-        hLocation={hLocation}
-        vLocation={vLocation}
-        isModifyModeOn={isModifyModeOn}
-        isBeingDragged={isBeingDragged}
-        isAbsolute={isAbsolute}
-        zIndex={zIndex}
-        onClick={selectComponent}
-      >
-        <div className='background'></div>
-        <div className='body'>BODY</div>
-      </Div>
-    </>
+    </Div>
   );
 };
 

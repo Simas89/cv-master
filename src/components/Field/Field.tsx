@@ -54,6 +54,8 @@ const Field: React.FC<FieldProps> = ({
     isEqual
   );
 
+  console.log(components);
+
   return (
     <FieldDiv
       ref={reference}

@@ -44,7 +44,7 @@ export const ZIndex: React.FC<ZIndexProps> = ({ pageId, componentId }) => {
         onClick={() => setZIndex(1)}
         size='small'
         variant='outlined'
-        disabled={zIndex > 9}
+        disabled={zIndex > 19}
       >
         +
       </Button>

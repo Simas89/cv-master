@@ -139,7 +139,7 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
   const setSpace = useCreateFreeSpace();
 
   const onDragPulled = () => {
-    setSpace({ isFree: true, pageId, componentsDimensions });
+    if (!isAbsolute) setSpace({ isFree: true, pageId, componentsDimensions });
 
     setModifyMode({
       isOn: true,

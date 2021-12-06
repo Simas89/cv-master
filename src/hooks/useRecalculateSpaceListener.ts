@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useStateSelector } from 'state';
 import isEqual from 'lodash.isequal';
 import useCreateFreeSpace from './useCreateFreeSpace';
+import useActionsField from 'state/actionHooks/useActionsField';
 
 const useRecalculateSpaceListener = (pageId: string) => {
   const filteredComps = useStateSelector(({ inventory }) => {
@@ -16,15 +17,18 @@ const useRecalculateSpaceListener = (pageId: string) => {
           isAbsolute: comps[el].isAbsolute,
         };
       })
-      //   @ts-ignore
-      .sort((a, b) => b.isAbsolute - a.isAbsolute);
+      // @ts-ignore
+      .filter((el) => el.isAbsolute === false);
 
     return filteredComps;
   }, isEqual);
 
   const setSpace = useCreateFreeSpace();
+  const { resetBlockValue } = useActionsField();
 
   useEffect(() => {
+    resetBlockValue({ pageId, blockKey: 'isFree', value: true });
+
     filteredComps.forEach((el) => {
       const componentsDimensions = [
         {
@@ -35,7 +39,7 @@ const useRecalculateSpaceListener = (pageId: string) => {
         },
       ];
 
-      setSpace({ isFree: el.isAbsolute, pageId, componentsDimensions });
+      setSpace({ isFree: false, pageId, componentsDimensions });
     });
   }, [filteredComps]);
 };

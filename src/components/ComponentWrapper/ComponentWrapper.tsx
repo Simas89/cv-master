@@ -69,14 +69,20 @@ const Menu = styled.div<WrapperPosition>`
   ${({ blockSize, width, height, hLocation, vLocation, isBeingDragged }) => css`
     left: ${blockSize * hLocation}px;
     top: ${blockSize * vLocation}px;
-    opacity: ${isBeingDragged ? 0.5 : 1};
+    opacity: 1;
+    ${isBeingDragged &&
+    css`
+      opacity: 0.5;
+      pointer-events: none;
+    `};
 
     .select-indicator {
       position: absolute;
       border: 1px solid green;
-      pointer-events: none;
+
       width: ${blockSize * width}px;
       height: ${blockSize * height}px;
+      pointer-events: none;
     }
   `};
 `;
@@ -138,6 +144,7 @@ const ComponentWrapper: React.FC<ComponentWrapperProps> = ({
     setModifyMode({
       isOn: true,
       memoize: true,
+      isAbsolute,
       componentId,
       pageId,
       height,

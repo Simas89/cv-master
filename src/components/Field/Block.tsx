@@ -67,7 +67,6 @@ export const Block = React.memo<BlockProps>(({ hBlock, vBlock, pageId }) => {
       checkSlot({ pageId, vBlock, hBlock });
     }
   };
-  console.log(111);
 
   return (
     <Div

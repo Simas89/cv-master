@@ -27,7 +27,7 @@ const useModifyModeHandler = () => {
     memoPageId,
   } = modifyMode;
 
-  const { setModifyMode, resetSlotCheck } = useActionsField();
+  const { setModifyMode, resetBlockValue } = useActionsField();
   const { addComponent, setComponent, deleteComponent } = useActionsInventory();
   const recalculateSpace = useRecalculateSpace();
 
@@ -93,18 +93,19 @@ const useModifyModeHandler = () => {
       }
       setModifyMode({
         isOn: false,
-        // isPassing: false,
+        isPassing: false,
         pageId: '',
         componentId: '',
-        // memoize: false,
-        // memoPageId: '',
-        // width: 0,
-        // height: 0,
-        // hLocation: 0,
-        // vLocation: 0,
+        memoize: false,
       });
 
-      pageNames.forEach((el) => resetSlotCheck(el));
+      pageNames.forEach((el) =>
+        resetBlockValue({
+          pageId: el,
+          blockKey: 'isInModifyMode',
+          value: false,
+        })
+      );
     };
 
     window.addEventListener('mouseup', onMouseUp);

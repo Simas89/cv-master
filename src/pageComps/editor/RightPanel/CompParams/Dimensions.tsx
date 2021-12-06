@@ -8,43 +8,46 @@ import isEqual from 'lodash.isequal';
 
 const Div = styled.div``;
 
-interface ZIndexProps {
+interface DimensionsProps {
   pageId: string;
   componentId: string;
 }
 
-export const ZIndex: React.FC<ZIndexProps> = ({ pageId, componentId }) => {
-  const zIndex = useStateSelector(
-    ({ inventory }) => inventory.pages[pageId].components[componentId].zIndex,
+export const Dimensions: React.FC<DimensionsProps> = ({
+  pageId,
+  componentId,
+}) => {
+  const width = useStateSelector(
+    ({ inventory }) => inventory.pages[pageId].components[componentId].width,
     isEqual
   );
 
   const { setComponent } = useActionsInventory();
 
-  const setZIndex = (index: number) => {
+  const setWidth = (index: number) => {
     setComponent({
       pageId,
       componentId,
-      component: { zIndex: zIndex + index },
+      component: { width: width + index },
     });
   };
 
   return (
     <Div>
-      Z-index {zIndex}{' '}
+      Width {width}{' '}
       <Button
-        onClick={() => setZIndex(-1)}
+        onClick={() => setWidth(-1)}
         size='small'
         variant='outlined'
-        disabled={zIndex < 1}
+        disabled={width < 1}
       >
         -
       </Button>
       <Button
-        onClick={() => setZIndex(1)}
+        onClick={() => setWidth(1)}
         size='small'
         variant='outlined'
-        disabled={zIndex > 19}
+        disabled={width > 9}
       >
         +
       </Button>

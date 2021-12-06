@@ -34,6 +34,12 @@ interface ComponentDimensions {
   }[];
 }
 
+interface ResetBlockValueProps {
+  pageId: string;
+  blockKey: 'isFree' | 'isInModifyMode';
+  value: boolean;
+}
+
 enum fieldDimensionsWidth {
   MEDIUM = 794, //96 - 794
   LARGE = 992, //120 - 992
@@ -245,12 +251,15 @@ export const slice = createSlice({
       });
     },
 
-    resetSlotCheck: (state, action: PayloadAction<string>) => {
-      const pageId = action.payload;
-      const currentField = state.pages[pageId].field;
+    resetBlockValue: (state, action: PayloadAction<ResetBlockValueProps>) => {
+      const pageId = action.payload.pageId;
+      const blockKey = action.payload.blockKey;
+      const value = action.payload.value;
+      const field = state.pages[pageId].field;
+
       for (let i = 0; i < H_BLOCKS; i++) {
         for (let j = 0; j < V_BLOCKS; j++) {
-          currentField[i][j].isInModifyMode = false;
+          field[i][j][blockKey] = value;
         }
       }
     },
@@ -266,7 +275,7 @@ export const {
   setModifyMode,
   checkSlot,
   setComponentSpaceIsFree,
-  resetSlotCheck,
+  resetBlockValue,
 } = slice.actions;
 
 export default slice.reducer;

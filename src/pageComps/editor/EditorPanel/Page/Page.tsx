@@ -32,7 +32,7 @@ const Page: React.FC<PageProps> = ({ pageId }) => {
 
   const fieldRef = useRef<HTMLDivElement>(null);
 
-  const { setBlockSize, resetSlotCheck, setModifyMode } = useActionsField();
+  const { setBlockSize, resetBlockValue, setModifyMode } = useActionsField();
   const { setSelectedPage } = useActionsInventory();
 
   useRecalculateSpaceListener(pageId);
@@ -50,7 +50,7 @@ const Page: React.FC<PageProps> = ({ pageId }) => {
 
   const handleMouseLeave = () => {
     if (isOn) {
-      resetSlotCheck(pageId);
+      resetBlockValue({ pageId, blockKey: 'isInModifyMode', value: false });
       setModifyMode({ isPassing: false, pageId: '' });
     }
   };

@@ -18,13 +18,13 @@ export const IsAbsolute: React.FC<IsAbsoluteProps> = ({
   const { isAbsolute, isOn, isAreaFree, componentsDimensions } =
     useStateSelector(({ inventory, field }) => {
       const comp = inventory.pages[pageId].components[componentId];
-      const height = comp.height;
-      const width = comp.width;
-      const hLocation = comp.hLocation;
-      const vLocation = comp.vLocation;
+      const height = comp.dimensions.height;
+      const width = comp.dimensions.width;
+      const hLocation = comp.dimensions.hLocation;
+      const vLocation = comp.dimensions.vLocation;
 
       const isAbsolute =
-        inventory.pages[pageId].components[componentId].isAbsolute;
+        inventory.pages[pageId].components[componentId].dimensions.isAbsolute;
       const isOn = field.modifyMode.isOn;
 
       let isAreaFree: boolean = true;
@@ -58,13 +58,13 @@ export const IsAbsolute: React.FC<IsAbsoluteProps> = ({
 
   const setSpace = useCreateFreeSpace();
 
-  const { setComponent } = useActionsInventory();
+  const { setComponentDimensions } = useActionsInventory();
 
   const toggleIsAbsolute = () => {
-    setComponent({
+    setComponentDimensions({
       pageId,
       componentId,
-      component: { isAbsolute: !isAbsolute },
+      dimensions: { isAbsolute: !isAbsolute },
     });
     setSpace({
       isFree: !isAbsolute,
@@ -72,6 +72,7 @@ export const IsAbsolute: React.FC<IsAbsoluteProps> = ({
       componentsDimensions,
     });
   };
+
   return (
     <div>
       <FormControlLabel

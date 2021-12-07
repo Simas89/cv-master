@@ -9,11 +9,11 @@ const useRecalculateSpaceListener = (pageId: string) => {
     const comps = inventory.pages[pageId].components;
     const filteredComps = Object.keys(comps).map((el) => {
       return {
-        height: comps[el].height,
-        width: comps[el].width,
-        hLocation: comps[el].hLocation,
-        vLocation: comps[el].vLocation,
-        isAbsolute: comps[el].isAbsolute,
+        height: comps[el].dimensions.height,
+        width: comps[el].dimensions.width,
+        hLocation: comps[el].dimensions.hLocation,
+        vLocation: comps[el].dimensions.vLocation,
+        isAbsolute: comps[el].dimensions.isAbsolute,
       };
     });
 

@@ -15,17 +15,18 @@ interface ZIndexProps {
 
 export const ZIndex: React.FC<ZIndexProps> = ({ pageId, componentId }) => {
   const zIndex = useStateSelector(
-    ({ inventory }) => inventory.pages[pageId].components[componentId].zIndex,
+    ({ inventory }) =>
+      inventory.pages[pageId].components[componentId].dimensions.zIndex,
     isEqual
   );
 
-  const { setComponent } = useActionsInventory();
+  const { setComponentDimensions } = useActionsInventory();
 
   const setZIndex = (index: number) => {
-    setComponent({
+    setComponentDimensions({
       pageId,
       componentId,
-      component: { zIndex: zIndex + index },
+      dimensions: { zIndex: zIndex + index },
     });
   };
 

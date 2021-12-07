@@ -1,36 +1,19 @@
-import { Checkbox, FormControlLabel } from '@mui/material';
 import React from 'react';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import { useStateSelector } from 'state';
 import useActionsInventory from 'state/actionHooks/useActionsInventory';
-// import { ComponentType } from 'types';
 import { ItemWrapper } from '.';
+import { itemsData } from 'config/itemsData';
 
-export enum ComponentType {
-  ITEM_A = 'ITEM_A',
-  ITEM_B = 'ITEM_B',
-  ITEM_C = 'ITEM_C',
-}
-
-const items = [
-  ComponentType.ITEM_A,
-  ComponentType.ITEM_B,
-  ComponentType.ITEM_C,
-];
-
-const itemsData = {
-  ITEM_A: {
-    componentType: ComponentType.ITEM_A,
-    dimensions: { width: 5, height: 2 },
-  },
-  ITEM_B: {
-    componentType: ComponentType.ITEM_B,
-    dimensions: { width: 7, height: 3 },
-  },
-  ITEM_C: {
-    componentType: ComponentType.ITEM_C,
-    dimensions: { width: 10, height: 5 },
-  },
-};
+const itemsArr = Object.keys(itemsData).map((el) => {
+  return {
+    componentType: itemsData[el].componentType,
+    dimensions: {
+      width: itemsData[el].dimensions.width,
+      height: itemsData[el].dimensions.height,
+    },
+  };
+});
 
 const Library = () => {
   const isCreateAbsolute = useStateSelector(
@@ -53,11 +36,10 @@ const Library = () => {
         }
         label='Create absolute'
       />
-      {items.map((el, idx) => (
-        <ItemWrapper key={'item' + idx} item={itemsData[el]}>
+      {itemsArr.map((el, idx) => (
+        <ItemWrapper key={'item' + idx} item={el}>
           <span>
-            {itemsData[el].dimensions.width}x{itemsData[el].dimensions.height} :{' '}
-            {itemsData[el].componentType}
+            {el.dimensions.width}x{el.dimensions.height} : {el.componentType}
           </span>
         </ItemWrapper>
       ))}

@@ -8,6 +8,8 @@ const PanelWraper = styled.div<PanelWraperProps>`
   width: 300px;
   height: 100%;
   flex-shrink: 0;
+  /* background-color: #122c43;
+  color: white; */
   ${({ side }) =>
     side === 'LEFT'
       ? css`

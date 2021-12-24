@@ -28,19 +28,18 @@ const useModifyModeHandler = () => {
   } = modifyMode;
 
   const { setModifyMode, resetBlockValue } = useActionsField();
-  const { addComponent, setComponent, deleteComponent } = useActionsInventory();
+  const { addComponent, setComponentDimensions, deleteComponent } =
+    useActionsInventory();
   const recalculateSpace = useRecalculateSpace();
 
   const createNewComponent = () => {
     const component = {
       componentType,
-      isAbsolute,
-      width,
-      height,
-      hLocation,
-      vLocation,
-      timeStamp: new Date().getTime(),
-      zIndex: 10,
+      location: {
+        hLocation,
+        vLocation,
+        isAbsolute,
+      },
     };
 
     if (pageId) {
@@ -49,13 +48,13 @@ const useModifyModeHandler = () => {
   };
 
   const setOldComponent = () => {
-    const component = {
+    const dimensions = {
       hLocation,
       vLocation,
     };
 
     if (pageId) {
-      setComponent({ pageId, memoPageId, componentId, component });
+      setComponentDimensions({ pageId, memoPageId, componentId, dimensions });
     }
 
     // component moved outside the page and is over another page
@@ -72,7 +71,11 @@ const useModifyModeHandler = () => {
       vLocation: memoVLocation,
     };
 
-    setComponent({ pageId, componentId, component: { ...dimensions } });
+    setComponentDimensions({
+      pageId,
+      componentId,
+      dimensions,
+    });
     recalculateSpace(pageId);
   };
 
@@ -88,7 +91,7 @@ const useModifyModeHandler = () => {
         }
       }
       if (!isPassing && memoize) {
-        console.log('Reset comp');
+        // console.log('Reset comp');
         resetComponent(pageId || memoPageId);
       }
       setModifyMode({

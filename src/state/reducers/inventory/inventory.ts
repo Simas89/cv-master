@@ -1,32 +1,43 @@
 import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { itemsData } from 'config/itemsData';
 import { ComponentType } from 'types';
 import { generateId } from 'util/generateId';
 
 export interface Component {
   componentType: ComponentType;
-  isAbsolute: boolean;
-  width: number;
-  height: number;
-  hLocation: number;
-  vLocation: number;
   timeStamp: number | null;
-  zIndex: number;
+  dimensions: {
+    width: number;
+    height: number;
+    hLocation: number;
+    vLocation: number;
+    isAbsolute: boolean;
+    zIndex: number;
+  };
 }
 
 interface AddComponentProps {
   pageId: string;
-  component: Component;
+  component: {
+    componentType: ComponentType;
+    location: {
+      hLocation: number;
+      vLocation: number;
+      isAbsolute: boolean;
+    };
+  };
 }
-interface SetComponentProps {
+
+interface SetComponentDimensionsProps {
   componentId: string;
   pageId: string;
   memoPageId?: string;
-  component: {
-    isAbsolute?: boolean;
+  dimensions: {
     width?: number;
     height?: number;
     hLocation?: number;
     vLocation?: number;
+    isAbsolute?: boolean;
     zIndex?: number;
   };
 }
@@ -131,31 +142,52 @@ export const slice = createSlice({
     // COMPONENT
     addComponent: (state, action: PayloadAction<AddComponentProps>) => {
       const pageId = action.payload.pageId;
-      const component = action.payload.component;
+      const componentType = action.payload.component.componentType;
+      const location = action.payload.component.location;
 
-      const componentId = generateId(component.componentType);
+      const defaultData = itemsData[componentType];
 
-      const newComponent = { ...component, zIndex: 10 };
+      const newComponent: Component = {
+        componentType,
+        timeStamp: new Date().getTime(),
+        dimensions: {
+          width: defaultData.dimensions.width,
+          height: defaultData.dimensions.height,
+          ...location,
+          zIndex: 10,
+        },
+      };
 
-      // merge component
+      const componentId = generateId(componentType);
+
       state.pages[pageId].components[componentId] = { ...newComponent };
       state.selectedComponent.pageId = pageId;
       state.selectedComponent.componentId = componentId;
     },
 
-    setComponent: (state, action: PayloadAction<SetComponentProps>) => {
+    setComponentDimensions: (
+      state,
+      action: PayloadAction<SetComponentDimensionsProps>
+    ) => {
       const pageId = action.payload.pageId;
       const memoPageId = action.payload.memoPageId;
       const componentId = action.payload.componentId;
-      const component = action.payload.component;
+      const dimensions = action.payload.dimensions;
 
-      const currentComponent = current(state.pages[memoPageId || pageId])
-        .components[componentId];
+      // if memoPageID - copy the previous page component over to a new page
+      if (memoPageId) {
+        state.pages[pageId].components[componentId] = {
+          ...state.pages[memoPageId].components[componentId],
+        };
+      }
+
+      const currentDimensions = current(state.pages[memoPageId || pageId])
+        .components[componentId].dimensions;
 
       // merge component
-      state.pages[pageId].components[componentId] = {
-        ...currentComponent,
-        ...component,
+      state.pages[pageId].components[componentId].dimensions = {
+        ...currentDimensions,
+        ...dimensions,
       };
       state.selectedComponent.pageId = pageId;
       state.selectedComponent.componentId = componentId;
@@ -197,7 +229,8 @@ export const {
   deleteComponentsPage,
   swapPage,
   addComponent,
-  setComponent,
+  // setComponent,
+  setComponentDimensions,
   deleteComponent,
   setSelectedComponent,
 } = slice.actions;

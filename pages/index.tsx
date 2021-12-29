@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import GameOfLife from 'pageComps/home/GameOfLife';
 import Link from 'common/components/Link';
+import { useSession } from 'next-auth/react';
 
 const Div = styled.div`
   height: 100vh;
@@ -20,6 +21,8 @@ const NoStyleLink = styled(Link)`
 `;
 
 const Game = () => {
+  const { data: session, status } = useSession();
+  console.log(session);
   return (
     <Div data-cy='home_page'>
       <NoStyleLink href='/editor'>

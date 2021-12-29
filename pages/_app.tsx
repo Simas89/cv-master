@@ -10,6 +10,7 @@ import { CacheProvider } from '@emotion/react';
 import { Provider } from 'react-redux';
 import { store } from 'state';
 import Layout from 'components/Layout';
+import { SessionProvider } from 'next-auth/react';
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -20,7 +21,7 @@ interface AppPropsEnchanted extends AppProps {
 
 const MyApp = ({
   Component,
-  pageProps,
+  pageProps: { session, ...pageProps },
   emotionCache = clientSideEmotionCache,
 }: AppPropsEnchanted) => {
   return (
@@ -31,7 +32,9 @@ const MyApp = ({
             <CssBaseline />
             <Provider store={store}>
               <Layout>
-                <Component {...pageProps} />
+                <SessionProvider session={session}>
+                  <Component {...pageProps} />
+                </SessionProvider>
               </Layout>
             </Provider>
           </StyledThemeProvider>
